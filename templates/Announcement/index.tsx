@@ -15,7 +15,7 @@ import { FaBullhorn } from "react-icons/fa";
 // dummy data
 import { dummyAnnouncements } from "../../constants/announcementsMock";
 
-const ComunicateTemplate: React.FC = () => {
+const AnnouncementTemplate: React.FC = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const announcementsPerPage = 2;
@@ -40,4 +40,4 @@ const ComunicateTemplate: React.FC = () => {
     );
 }
 
-export default ComunicateTemplate;
+export default AnnouncementTemplate;

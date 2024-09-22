@@ -5,9 +5,14 @@
 // hooks
 import { useEffect, useState } from "react";
 import AnnouncementModal from "../../components/modals/Announcement";
+import { IHandleActionAnnouncement } from "../../types/announcement";
 
+// interfaces
+export interface IModalProvider {
+    handleActionsAnnouncement: IHandleActionAnnouncement;
+}
 
-const ModalProvider: React.FC = ({ }) => {
+const ModalProvider: React.FC<IModalProvider> = ({ handleActionsAnnouncement, }) => {
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -17,7 +22,7 @@ const ModalProvider: React.FC = ({ }) => {
 
     return (
         <>
-            <AnnouncementModal />
+            <AnnouncementModal handleActions={handleActionsAnnouncement} />
         </>
     );
 };
