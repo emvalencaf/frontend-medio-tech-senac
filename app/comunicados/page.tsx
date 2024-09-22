@@ -1,7 +1,5 @@
-export default async function ComunicatesPage() {
-    return (
-        <div>
+import ComunicateTemplate from "../../templates/Comunicate";
 
-        </div>
-    );
+export default async function ComunicatesPage() {
+    return <ComunicateTemplate />
 }
