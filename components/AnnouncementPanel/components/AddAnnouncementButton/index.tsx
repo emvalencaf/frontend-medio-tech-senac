@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaBullhorn, FaPlus } from 'react-icons/fa';
+import { FaBullhorn } from 'react-icons/fa';
 
 interface AddAnnouncementButtonProps {
     onClick: () => void;

@@ -1,27 +1,41 @@
-import { FaBullhorn } from "react-icons/fa";
+"use client";
+
+// components
 import Header from "../../components/Header";
-import ComunicatePanel from "../../components/ComunicatePanel";
-import PanelFilter from "../../components/PanelFilter";
+import AnnouncementPanel from "../../components/AnnouncementPanel";
 import AnnouncementsContainer from "../../components/AnnouncementsContainer";
-import { mockAnnouncements } from "../../constants/announcementsMock";
+import Pagination from "../../components/Pagination";
+
+// hooks
+import { useState } from "react";
+
+// icons
+import { FaBullhorn } from "react-icons/fa";
+
+// dummy data
+import { dummyAnnouncements } from "../../constants/announcementsMock";
 
 const ComunicateTemplate: React.FC = () => {
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const announcementsPerPage = 2;
+
+    const totalPages = Math.ceil(dummyAnnouncements.length / announcementsPerPage);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const currentAnnouncements = dummyAnnouncements.slice(
+        (currentPage - 1) * announcementsPerPage,
+        currentPage * announcementsPerPage
+    );
     return (
         <div className="w-full">
-            <Header title="Comunicados" Icon={FaBullhorn}  />
-            <PanelFilter />
-            <AnnouncementsContainer announcements={[
-    {
-        id: 1,
-        title: 'Inaugurei um novo parque no bairro da Boa Vista, vocês farão um software para ajudar o meio ambiente',
-        postDate: new Date(),
-        author: {
-            name: "João Campos",
-            avatarUrl: '/assets/avatar.png',
-        },
-        content: 'Vocês farão um software com Machine Learning para identificar pessoas que estão passeando com seus animais de estimação e não estão recolhendo as fezes deles. O objetivo é que a Prefeitura do Recife planeja multar esses donos de animais. O projeto se chama: Fezes Zero! Vocês serão avaliados por esse projeto, boa sorte!',
-    }
-]} itemsPerPage={0} />
+            <Header title="Comunicados" Icon={FaBullhorn} />
+            <AnnouncementPanel />
+            <AnnouncementsContainer announcements={currentAnnouncements} />
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </div>
     );
 }

@@ -6,11 +6,11 @@ import { useState } from 'react';
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 
 
-interface FiltersProps {
+interface IAnnouncementFilters {
     onFiltersChange: (keywords: KeywordOption[], dateSort: DateSortOrder) => void;
 }
 
-const Filters: React.FC<FiltersProps> = ({ onFiltersChange }) => {
+const AnnouncementFilters: React.FC<IAnnouncementFilters> = ({ onFiltersChange }) => {
     const [selectedKeywords, setSelectedKeywords] = useState<KeywordOption[]>([]);
     const [dateSortOrder, setDateSortOrder] = useState<DateSortOrder>('desc');
 
@@ -56,4 +56,4 @@ const Filters: React.FC<FiltersProps> = ({ onFiltersChange }) => {
     );
 };
 
-export default Filters;
+export default AnnouncementFilters;

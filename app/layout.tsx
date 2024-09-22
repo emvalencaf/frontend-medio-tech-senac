@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+
+// components
 import Sidebar from "../components/Sidenav";
+
+// providers
 import ToasterProvider from "../providers/ToasterProvider";
+import ModalProvider from "../providers/ModalProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -30,6 +36,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
       >
+        <ModalProvider />
         <ToasterProvider />
         <Sidebar />
         {children}

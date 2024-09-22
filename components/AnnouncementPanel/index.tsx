@@ -2,12 +2,14 @@
 
 import React, { useState } from 'react';
 import { FaSearch, FaTag, FaSortAmountDown, FaSortAmountUp, FaPlus } from 'react-icons/fa';
-import SearchForm from './components/SearchForm';
-import AnnouncementSearch from './components/SearchForm';
-import Filters from '../Filters';
-import AddAnnouncementButton from './components/AddAnnouncementButton';
 
-const FilterPanel = () => {
+// components
+import AnnouncementSearch from './components/SearchForm';
+import AnnouncementFilters from '../AnnouncementFilters';
+import AddAnnouncementButton from './components/AddAnnouncementButton';
+import useAnnouncementModal from '../../hooks/useModal';
+
+const AnnouncementPanel = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
     const [sortOrder, setSortOrder] = useState('descending');
@@ -15,6 +17,8 @@ const FilterPanel = () => {
         keywords: [],
         dateSort: null
     });
+
+    const { onOpen } = useAnnouncementModal();
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
@@ -38,14 +42,11 @@ const FilterPanel = () => {
         <div className="flex flex-col space-y-4 p-4 bg-white shadow-md rounded-lg items-center justify-center w-full">
             <div className='flex gap-3 items-center justify-center w-full'>
                 <AnnouncementSearch />
-                <Filters onFiltersChange={handleFiltersChange} />
-                <AddAnnouncementButton onClick={function (): void {
-                    throw new Error('Function not implemented.');
-                }} />
-
+                <AnnouncementFilters onFiltersChange={handleFiltersChange} />
+                <AddAnnouncementButton onClick={onOpen} />
             </div>
         </div>
     );
 };
 
-export default FilterPanel;
+export default AnnouncementPanel;

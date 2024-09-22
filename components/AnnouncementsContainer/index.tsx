@@ -1,65 +1,28 @@
 "use client";
-import React, { useState } from 'react';
-import Announcement from '../Announcement';
-import Pagination from '../Pagination';
 
-interface AnnouncementData {
-    id: number;
-    title: string;
-    postDate: Date;
-    author: {
-        name: string;
-        avatarUrl: string;
-    };
-    content: string;
+import React from 'react';
+
+// custom components
+import Announcement, { IAnnouncement } from '../Announcement';
+
+export interface IAnnouncementsContainer {
+    announcements: IAnnouncement[];
 }
 
-interface AnnouncementsContainerProps {
-    announcements: AnnouncementData[];
-    itemsPerPage: number;
-}
-
-const AnnouncementsContainer: React.FC<AnnouncementsContainerProps> = ({ announcements, itemsPerPage }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-
-    // Calcular índices
-    const totalAnnouncements = announcements.length;
-    // const indexOfLastItem = currentPage * itemsPerPage;
-    // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
-    // Garantir que o array não fique vazio
-    // const currentAnnouncements = totalAnnouncements > 0
-    //    ? announcements.slice(indexOfFirstItem, indexOfLastItem)
-    //    : [];
-
-    // const paginate = (pageNumber: number) => {
-    //    if (pageNumber < 1 || pageNumber > Math.ceil(totalAnnouncements / itemsPerPage)) {
-    //        return; // Evitar página inválida
-    //    }
-    //    setCurrentPage(pageNumber);
-    // };
-
+const AnnouncementsContainer: React.FC<IAnnouncementsContainer> = ({ announcements }) => {
     return (
-        <div className="space-y-4">
-            {announcements.length > 0 ? (
-                announcements.map((announcement) => (
-                    <Announcement key={announcement.id} {...announcement} />
-                ))
-            ) : (
-                <div className="text-center text-gray-500">Nenhum comunicado encontrado.</div>
-            )}
-            {/*
-            
-            <Pagination
-                itemsPerPage={itemsPerPage}
-                totalItems={totalAnnouncements}
-                paginate={paginate}
-                currentPage={currentPage}
-            />
-            
-            */}
+        <div className="w-full mx-auto my-8 p-9 flex gap-5 flex-col">
+            {announcements.map((announcement) => (
+                <Announcement
+                    key={announcement.id}
+                    author={announcement.author}
+                    title={announcement.title}
+                    content={announcement.content}
+                    createdAt={announcement.createdAt} id={announcement.id}                />
+            ))}
         </div>
     );
 };
 
 export default AnnouncementsContainer;
+
