@@ -1,4 +1,6 @@
-import { AnnouncementFormData } from "../actions/announcements/schemas";
+import { AnnouncementFormData, IGetAnnouncementsQueryParams } from "../actions/announcements/schemas";
+import { IAnnouncementEntity, } from "../actions/announcements/types";
+import { IClassEntity } from "../actions/classes/types";
 
 export interface AnnouncementDtO {
     title: string;
@@ -7,10 +9,8 @@ export interface AnnouncementDtO {
 }
 
 export interface IHandleActionAnnouncement {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handleActionCreate: (data: AnnouncementFormData) => Promise<any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handleActionGetClassesByTeacher: (authorId: number) => Promise<any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handleActionGetAllClasses: () => Promise<any>;
+    handleActionCreate: (data: AnnouncementFormData) => Promise<IAnnouncementEntity | null>;
+    handleActionGetClassesByTeacher: (authorId: number) => Promise<IClassEntity[] | null>;
+    handleActionGetAllClasses: () => Promise<IClassEntity[] | null>;
+    handleActionGetAnnouncements: (queryparams?: IGetAnnouncementsQueryParams) => Promise<IAnnouncementEntity[] | null>;
 }

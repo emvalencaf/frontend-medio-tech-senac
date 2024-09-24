@@ -1,18 +1,18 @@
 import axios from "axios";
 
 // types
-import { IClassEntity } from "./responsesTypes";
-import { IResponseError } from "../responsesTypes";
+import { IClassEntity } from "./types";
 
 const BACKEND_URL = `${process.env.BACKEND_URL}/classes`;
 
-export const getAllByTeacher = async (teacherId: number): Promise<IClassEntity[] | IResponseError> => {
+export const getAllByTeacher = async (teacherId: number): Promise<IClassEntity[] | null> => {
     try {
         const res = await axios.get(`${BACKEND_URL}/teachers/${teacherId}`);
 
         const data = res.data;
 
         return data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         // Verifica se a resposta tem dados
         if (err?.response && err?.response?.data) {
@@ -24,7 +24,7 @@ export const getAllByTeacher = async (teacherId: number): Promise<IClassEntity[]
     }
 }
 
-export const getAllClasses = async ():  Promise<IClassEntity[] | IResponseError> => {
+export const getAllClasses = async ():  Promise<IClassEntity[] | null> => {
     try {
         const res = await axios.get(BACKEND_URL);
 
@@ -32,6 +32,7 @@ export const getAllClasses = async ():  Promise<IClassEntity[] | IResponseError>
 
         return data;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         // Verifica se a resposta tem dados
         if (err?.response && err?.response?.data) {

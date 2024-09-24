@@ -15,6 +15,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AnnouncementFormData, announcementSchema } from '../../../../../actions/announcements/schemas';
 import useAnnouncementModal from '../../../../../hooks/useModal';
 import { useEffect, useState } from 'react';
+import { IAnnouncementEntity } from '../../../../../actions/announcements/types';
+import { IClassEntity } from '../../../../../actions/classes/types';
 
 export interface IClassOptions {
     value: number;
@@ -23,8 +25,8 @@ export interface IClassOptions {
 
 // interfaces
 export interface IAnnouncementForm {
-    handleActionCreate: (data: AnnouncementFormData) => Promise<any>;
-    handleActionGetClassOptions: (authorId: number) => Promise<any>;
+    handleActionCreate: (data: AnnouncementFormData) => Promise<IAnnouncementEntity | null>;
+    handleActionGetClassOptions: (authorId: number) => Promise<IClassEntity[] | null>;
 }
 
 const AnnouncementForm: React.FC<IAnnouncementForm> = ({
@@ -37,7 +39,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
 
     const { onClose } = useAnnouncementModal();
 
-    const [authorId, setAuthorId] = useState(2);
+    const [authorId, setAuthorId] = useState(2);// will change with authentication
     const [classOptions, setClassOptions] = useState<IClassOptions[]>([]);
     const [loadingClassOptions, setLoadingClassOptions] = useState(true);
     const [errorClassOptions, setErrorClassOptions] = useState<string | null>(null);
@@ -48,11 +50,16 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             setErrorClassOptions(null);
             try {
                 const data = await handleActionGetClassOptions(authorId);
+
+                if (!data)
+                    return setClassOptions([]);
+
                 const options = data.map((classItem: { id: number; name: string }) => ({
                     value: classItem.id,
                     label: classItem.name,
                 }));
                 setClassOptions(options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
                 setErrorClassOptions('Failed to fetch classes');
             } finally {
@@ -71,6 +78,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             console.log('Form data:', res);
             onClose();
             toast.success('Announcement created successfully!');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.log(error);
             const errorsMsg = error.message;

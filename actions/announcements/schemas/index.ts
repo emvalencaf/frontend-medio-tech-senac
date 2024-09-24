@@ -7,3 +7,11 @@ export const announcementSchema = z.object({
   });
   
 export  type AnnouncementFormData = z.infer<typeof announcementSchema>;
+
+export interface IGetAnnouncementsQueryParams {
+    title?: string;
+    author?: string;
+    order?: 'asc' | 'desc';
+    page?: number;
+    limit?: number;
+  }

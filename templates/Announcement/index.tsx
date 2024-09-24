@@ -14,28 +14,44 @@ import { FaBullhorn } from "react-icons/fa";
 
 // dummy data
 import { dummyAnnouncements } from "../../constants/announcementsMock";
+import { IAnnouncement } from "../../components/Announcement";
+import { IAnnouncementEntity } from "../../actions/announcements/types";
 
-const AnnouncementTemplate: React.FC = () => {
+export interface IAnnouncementTemplate {
+    announcements: IAnnouncementEntity[];
+    currentPage: number;
+    totalPages: number;
+}
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const announcementsPerPage = 2;
 
-    const totalPages = Math.ceil(dummyAnnouncements.length / announcementsPerPage);
+const AnnouncementTemplate: React.FC<IAnnouncementTemplate> = ({ announcements, currentPage = 1, totalPages, }) => {
 
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
+    const announcementsTreated: IAnnouncement[] = announcements.map((announcement) => {
 
-    const currentAnnouncements = dummyAnnouncements.slice(
-        (currentPage - 1) * announcementsPerPage,
-        currentPage * announcementsPerPage
-    );
+        // only teacher and coordinator can do announcements
+        const userType = announcement.author.userType === 'COORDINATOR' ? "Coordenador" : "Professor";
+        
+        const announcementC: IAnnouncement = {
+            author: {
+                name: announcement.author.firstName + ' ' + announcement.author.lastName,
+                userType,
+                avatarUrl: '/assets/avatar.png', // change that once implement avatar url at database level
+            },
+            title: announcement.title,
+            content: announcement.content,
+            createdAt: new Date(announcement.createdAt),
+            id: announcement.id,
+        }
+
+        return announcementC;
+    });
+
     return (
         <div className="w-full">
             <Header title="Comunicados" Icon={FaBullhorn} />
             <AnnouncementPanel />
-            <AnnouncementsContainer announcements={currentAnnouncements} />
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            <AnnouncementsContainer announcements={announcementsTreated} />
+            <Pagination totalPages={totalPages} currentPage={currentPage} />
         </div>
     );
 }
