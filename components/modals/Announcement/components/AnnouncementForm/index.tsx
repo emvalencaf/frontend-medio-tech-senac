@@ -1,6 +1,9 @@
 "use client";
 // hooks
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import useAnnouncementModal from '../../../../../hooks/useModal';
 
 // components
 import Select from 'react-select';
@@ -10,11 +13,8 @@ import toast from 'react-hot-toast';
 import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineUser, AiOutlineFileText } from 'react-icons/ai'; // Ícones para os campos
 
-// schemas
-import { zodResolver } from '@hookform/resolvers/zod';
+// schemas and types
 import { AnnouncementFormData, announcementSchema } from '../../../../../actions/announcements/schemas';
-import useAnnouncementModal from '../../../../../hooks/useModal';
-import { useEffect, useState } from 'react';
 import { IAnnouncementEntity } from '../../../../../actions/announcements/types';
 import { IClassEntity } from '../../../../../actions/classes/types';
 
@@ -77,7 +77,8 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             const res = await handleActionCreate(data);
             console.log('Form data:', res);
             onClose();
-            toast.success('Announcement created successfully!');
+            // toast.success('Announcement created successfully!');
+            window.location.reload();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.log(error);

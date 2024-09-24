@@ -53,8 +53,6 @@ export const getAnnouncements = async (token: string, queryparams?: IGetAnnounce
         });
       }
       
-      console.log(queryparams);
-
       const res = await axios.get(url.toString(), {
         headers: {
           'Content-Type': 'application/json',

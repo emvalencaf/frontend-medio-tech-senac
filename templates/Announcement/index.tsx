@@ -6,14 +6,10 @@ import AnnouncementPanel from "../../components/AnnouncementPanel";
 import AnnouncementsContainer from "../../components/AnnouncementsContainer";
 import Pagination from "../../components/Pagination";
 
-// hooks
-import { useState } from "react";
-
 // icons
 import { FaBullhorn } from "react-icons/fa";
 
-// dummy data
-import { dummyAnnouncements } from "../../constants/announcementsMock";
+// interfaces
 import { IAnnouncement } from "../../components/Announcement";
 import { IAnnouncementEntity } from "../../actions/announcements/types";
 
