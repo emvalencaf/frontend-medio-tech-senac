@@ -17,6 +17,7 @@ import { AiOutlineUser, AiOutlineFileText } from 'react-icons/ai'; // Ícones pa
 import { AnnouncementFormData, announcementSchema } from '../../../../../actions/announcements/schemas';
 import { IAnnouncementEntity } from '../../../../../actions/announcements/types';
 import { IClassEntity } from '../../../../../actions/classes/types';
+import { useSession } from 'next-auth/react';
 
 export interface IClassOptions {
     value: number;
@@ -33,13 +34,17 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
     handleActionCreate,
     handleActionGetClassOptions,
 }) => {
+    const session = useSession();
+
+    const authorId = Number(session.data?.user?.id);
+
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<AnnouncementFormData>({
         resolver: zodResolver(announcementSchema),
     });
-
+    
     const { onClose } = useAnnouncementModal();
 
-    const [authorId, setAuthorId] = useState(2);// will change with authentication
+    // const [authorId, setAuthorId] = useState(session.data?.user?.id);// will change with authentication
     const [classOptions, setClassOptions] = useState<IClassOptions[]>([]);
     const [loadingClassOptions, setLoadingClassOptions] = useState(true);
     const [errorClassOptions, setErrorClassOptions] = useState<string | null>(null);

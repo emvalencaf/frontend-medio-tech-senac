@@ -1,21 +1,34 @@
 import Link from "next/link";
-import { getAnnouncements } from "../../actions/announcements";
-import AnnouncementTemplate from "../../templates/Announcement";
+import { getAnnouncements } from "../../../actions/announcements";
+import AnnouncementTemplate from "../../../templates/Announcement";
 import { AiOutlineWarning } from "react-icons/ai";
+import { auth } from "../../../auth";
+import { redirect } from "next/navigation";
+import { IGetAnnouncementsQueryParams } from "../../../actions/announcements/schemas";
 
-export default async function AnnouncementPage({ searchParams }) {
-    const queryparams = {
-        title: searchParams?.title,
-        author: searchParams?.author,
-        order: searchParams?.order || 'desc',
-        page: searchParams?.page || 1,
-        limit: searchParams?.limit || 10,
-    }
+export interface IAnnouncementPage {
+    searchParams: Record<string, string | string[] | undefined>;
+}
 
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6Ikpvw6NvIENhbXBvcyIsInVzZXJUeXBlIjoiVEVBQ0hFUiIsImlhdCI6MTUxNjIzOTAyMn0.QTT5gfXh1DWWZr_p55brzGYTNUSidIUicGBsH90gXzw"; // token will be replaced
+export default async function AnnouncementPage({ searchParams }: IAnnouncementPage) {
+
+    const session = await auth();
+
+    if (!session)
+        return redirect('/');
+
+    const queryparams: IGetAnnouncementsQueryParams = {
+        title: searchParams?.title ? String(searchParams.title) : undefined,
+        author: searchParams?.author ? String(searchParams.author) : undefined,
+        order: (searchParams?.order === 'asc' || searchParams?.order === 'desc') ? searchParams.order as 'asc' | 'desc' : 'desc',
+        page: searchParams?.page ? Number(searchParams.page) : 1,
+        limit: searchParams?.limit ? Number(searchParams.limit) : 10,
+    };
+
+    const token = session.backendToken;
 
     try {
-        const res = await getAnnouncements(token, queryparams);
+        const res = await getAnnouncements(token || '', queryparams);
         console.log(res);
 
         return (
