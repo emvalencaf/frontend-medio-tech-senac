@@ -13,6 +13,7 @@ import { createAnnouncement } from "../actions/announcements";
 import { getAllByTeacher, getAllClasses } from "../actions/classes";
 import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
+import NotificationProvider from "../providers/NotificationProvider";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -59,6 +60,7 @@ export default async function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
             >
                 <SessionProvider session={session}>
+                    <NotificationProvider />
                     <ModalProvider handleActionsAnnouncement={handleActionsAnnouncement} />
                     <ToasterProvider />
                     <Sidebar />

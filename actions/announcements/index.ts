@@ -36,7 +36,7 @@ export const createAnnouncement = async (announcement: AnnouncementFormData): Pr
             console.log(err?.response?.data);
             throw new Error(Array.isArray(err?.response?.data?.message) ? err?.response?.data?.message.join(', ') : err?.response?.data.message);
         } else {
-            throw new Error("An unknown error occurred");
+            throw new Error("Um erro desconhecido aconteceu.");
         }
     }
 };
@@ -68,7 +68,7 @@ export const getAnnouncements = async (token: string, queryparams?: IGetAnnounce
         console.log(err?.response?.data);
         throw new Error(Array.isArray(err?.response?.data?.message) ? err?.response?.data?.message.join(', ') : err?.response?.data.message);
       } else {
-        throw new Error("An unknown error occurred");
+        throw new Error("Um erro desconhecido aconteceu");
       }
     }
   };

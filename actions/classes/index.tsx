@@ -19,7 +19,7 @@ export const getAllByTeacher = async (teacherId: number): Promise<IClassEntity[]
             console.log(err?.response?.data);
             throw new Error(Array.isArray(err?.response?.data?.message) ? err?.response?.data?.message.join(', ') : err?.response?.data.message);
         } else {
-            throw new Error("An unknown error occurred");
+            throw new Error("Um erro desconhecido aconteceu");
         }
     }
 }
@@ -39,7 +39,7 @@ export const getAllClasses = async ():  Promise<IClassEntity[] | null> => {
             console.log(err?.response?.data);
             throw new Error(Array.isArray(err?.response?.data?.message) ? err?.response?.data?.message.join(', ') : err?.response?.data.message);
         } else {
-            throw new Error("An unknown error occurred");
+            throw new Error("Um erro desconhecido aconteceu");
         }
     }
 }
