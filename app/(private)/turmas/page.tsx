@@ -1,5 +1,5 @@
-import ManagmentClassesTemplate from "../../../templates/Classes";
+import ClassesTemplate from "../../../templates/Classes";
 
-export default async function ManagmentClassPage() {
-    return <ManagmentClassesTemplate />
+export default async function ClassesPage() {
+    return <ClassesTemplate />
 }
