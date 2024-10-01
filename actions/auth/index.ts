@@ -6,7 +6,7 @@ const BACKEND_URL = process.env.BACKEND_URL;
 
 export const handleSignIn = async (credentials: CredentialSignInParams) => {
     try {
-
+        console.log(BACKEND_URL);
         const res = await axios.post(`${BACKEND_URL}/auth/sign-in`, credentials);
 
         const data: PayloadSignIn = res.data;

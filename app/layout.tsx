@@ -63,8 +63,10 @@ export default async function RootLayout({
                     <NotificationProvider />
                     <ModalProvider handleActionsAnnouncement={handleActionsAnnouncement} />
                     <ToasterProvider />
-                    <Sidebar />
-                    {children}
+                    {session && <Sidebar />}
+                    <main className="flex justify-center items-center w-full">
+                        {children}
+                    </main>
                 </SessionProvider>
             </body>
         </html>
