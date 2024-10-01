@@ -1,7 +1,7 @@
 'use client';
 
 import Select from 'react-select';
-import { DateSortOption, DateSortOrder, KeywordOption, keywordOptions } from '../../constants/filtersOptions';
+import { DateSortOrder, KeywordOption, keywordOptions } from '../../constants/filtersOptions';
 import { useState } from 'react';
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 

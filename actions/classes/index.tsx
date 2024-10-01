@@ -5,6 +5,10 @@ import { IClassEntity } from "./types";
 
 const BACKEND_URL = `${process.env.BACKEND_URL}/classes`;
 
+export const createClass = async (data: any) => {
+    return;
+}
+
 export const getAllByTeacher = async (teacherId: number): Promise<IClassEntity[] | null> => {
     try {
         const res = await axios.get(`${BACKEND_URL}/teachers/${teacherId}`);

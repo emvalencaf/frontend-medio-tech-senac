@@ -10,10 +10,11 @@ import ToasterProvider from "../providers/ToasterProvider";
 import ModalProvider from "../providers/ModalProvider";
 import { IHandleActionAnnouncement } from "../types/announcement";
 import { createAnnouncement } from "../actions/announcements";
-import { getAllByTeacher, getAllClasses } from "../actions/classes";
+import { createClass, getAllByTeacher, getAllClasses } from "../actions/classes";
 import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
 import NotificationProvider from "../providers/NotificationProvider";
+import { IHandleActionClass } from "../types/class";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -54,6 +55,14 @@ export default async function RootLayout({
         },
     }
 
+    const handleActionsClass: IHandleActionClass = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        handleActionCreate: async (data: any) => {
+            "use server";
+            return createClass(data);
+        },
+    }
+
     return (
         <html lang="en">
             <body
@@ -61,7 +70,7 @@ export default async function RootLayout({
             >
                 <SessionProvider session={session}>
                     <NotificationProvider />
-                    <ModalProvider handleActionsAnnouncement={handleActionsAnnouncement} />
+                    <ModalProvider handleActionsAnnouncement={handleActionsAnnouncement} handleActionsClass={handleActionsClass} />
                     <ToasterProvider />
                     {session && <Sidebar />}
                     <main className="flex justify-center items-center w-full">

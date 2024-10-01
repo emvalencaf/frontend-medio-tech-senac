@@ -1,15 +1,20 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FaSearch, FaTag, FaSortAmountDown, FaSortAmountUp, FaPlus } from 'react-icons/fa';
 
 // components
 import AnnouncementSearch from './components/SearchForm';
 import AnnouncementFilters from '../AnnouncementFilters';
 import AddAnnouncementButton from './components/AddAnnouncementButton';
-import useAnnouncementModal from '../../hooks/useModal';
+import useAnnouncementModal from '../../hooks/useAnnouncementModal';
+import { useSession } from 'next-auth/react';
+import { extractUserTypeFromBackEndToken } from '../../utils';
 
 const AnnouncementPanel = () => {
+    const { data } = useSession();
+
+    const userType = extractUserTypeFromBackEndToken(data?.backendToken);
+    
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
     const [sortOrder, setSortOrder] = useState('descending');
@@ -43,7 +48,9 @@ const AnnouncementPanel = () => {
             <div className='flex gap-3 items-center justify-center w-full'>
                 <AnnouncementSearch />
                 <AnnouncementFilters onFiltersChange={handleFiltersChange} />
-                <AddAnnouncementButton onClick={onOpen} />
+                {userType !== "STUDENT" &&
+                    <AddAnnouncementButton onClick={onOpen} />
+                }
             </div>
         </div>
     );

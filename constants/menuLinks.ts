@@ -1,5 +1,6 @@
 import { FaBullhorn, FaCalendarAlt, FaChalkboardTeacher, FaHome, FaMoneyBillAlt, FaUser, FaUsers } from "react-icons/fa";
 import { IMenuLink } from "../components/Sidenav/components/Navbar/components/MenuLink";
+import { SiGoogleclassroom } from "react-icons/si";
 
 export const menuLinks: IMenuLink[] = [
     {
@@ -18,9 +19,9 @@ export const menuLinks: IMenuLink[] = [
         label: "Professores"
     },
     {
-        href: "/gerenciar-turma",
-        Icon: FaCalendarAlt,
-        label: "Gerenciar Turma"
+        href: "/turmas",
+        Icon: SiGoogleclassroom,
+        label: "Turmas"
     }
     , {
         href: "/calendario",

@@ -1,7 +1,7 @@
 'use client';
 
 // hooks
-import useAnnouncementModal from '../../../hooks/useModal';
+import useAnnouncementModal from '../../../hooks/useAnnouncementModal';
 
 // components
 import Modal from '../Modal';

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import useAnnouncementModal from '../../../../../hooks/useAnnouncementModal';
+import useClassModal from '../../../../../hooks/useAnnouncementModal';
 
 // components
 import Select from 'react-select';
@@ -14,8 +14,8 @@ import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineUser, AiOutlineFileText } from 'react-icons/ai'; // Ícones para os campos
 
 // schemas and types
-import { AnnouncementFormData, announcementSchema } from '../../../../../actions/announcements/schemas';
-import { IAnnouncementEntity } from '../../../../../actions/announcements/types';
+import { ClassFormData, classSchema } from '../../../../../actions/classes/schemas';
+import { IClassEntity } from '../../../../../actions/classes/types';
 import { IClassEntity } from '../../../../../actions/classes/types';
 import { useSession } from 'next-auth/react';
 
@@ -25,12 +25,12 @@ export interface IClassOptions {
 }
 
 // interfaces
-export interface IAnnouncementForm {
-    handleActionCreate: (data: AnnouncementFormData) => Promise<IAnnouncementEntity | null>;
+export interface IClassForm {
+    handleActionCreate: (data: ClassFormData) => Promise<IClassEntity | null>;
     handleActionGetClassOptions: (authorId: number) => Promise<IClassEntity[] | null>;
 }
 
-const AnnouncementForm: React.FC<IAnnouncementForm> = ({
+const ClassForm: React.FC<IClassForm> = ({
     handleActionCreate,
     handleActionGetClassOptions,
 }) => {
@@ -38,11 +38,11 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
 
     const authorId = Number(session.data?.user?.id);
 
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<AnnouncementFormData>({
-        resolver: zodResolver(announcementSchema),
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm<ClassFormData>({
+        resolver: zodResolver(classSchema),
     });
-    
-    const { onClose } = useAnnouncementModal();
+
+    const { onClose } = useClassModal();
 
     // const [authorId, setAuthorId] = useState(session.data?.user?.id);// will change with authentication
     const [classOptions, setClassOptions] = useState<IClassOptions[]>([]);
@@ -64,7 +64,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
                     label: classItem.name,
                 }));
                 setClassOptions(options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
                 setErrorClassOptions('Failed to fetch classes');
             } finally {
@@ -77,14 +77,14 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
         }
     }, [authorId, handleActionGetClassOptions]);
 
-    const onSubmit = async (data: AnnouncementFormData) => {
+    const onSubmit = async (data: ClassFormData) => {
         try {
             const res = await handleActionCreate(data);
             console.log('Form data:', res);
             onClose();
-            // toast.success('Announcement created successfully!');
+            // toast.success('Class created successfully!');
             window.location.reload();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.log(error);
             const errorsMsg = error.message;
@@ -103,47 +103,41 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             {/* Campo de Título */}
             <div>
                 <label htmlFor="title" className="flex items-center text-sm font-medium text-gray-700">
-                    <AiOutlineUser className="mr-2 text-gray-500" /> Título
+                    <AiOutlineUser className="mr-2 text-gray-500" /> Nome
                 </label>
                 <input
                     id="title"
                     type="text"
-                    {...register('title')}
-                    className={`mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.title ? 'border-red-500' : ''}`}
+                    {...register('name')}
+                    className={`mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.name ? 'border-red-500' : ''}`}
                 />
-                {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
+                {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
             </div>
 
-            {/* Campo de Conteúdo */}
             <div>
-                <label htmlFor="content" className="flex items-center text-sm font-medium text-gray-700">
-                    <AiOutlineFileText className="mr-2 text-gray-500" /> Conteúdo
+                <label htmlFor="title" className="flex items-center text-sm font-medium text-gray-700">
+                    <AiOutlineUser className="mr-2 text-gray-500" /> Ano
                 </label>
-                <textarea
-                    id="content"
-                    rows={4}
-                    {...register('content')}
-                    className={`mt-1 block w-full border p-2 resize-none min-h-200 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.content ? 'border-red-500' : ''}`}
+                <input
+                    id="title"
+                    type="text"
+                    {...register('year')}
+                    className={`mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.name ? 'border-red-500' : ''}`}
                 />
-                {errors.content && <span className="text-red-500 text-sm">{errors.content.message}</span>}
+                {errors.year && <span className="text-red-500 text-sm">{errors.year.message}</span>}
             </div>
 
-            {/* Campo de Classes (Select Multi) */}
             <div>
-                <label htmlFor="classes" className="block text-sm font-medium text-gray-700">Classes</label>
-                <Select
-                    isMulti
-                    options={classOptions}
-                    className="mt-1"
-                    onChange={(selectedOptions) => setValue('classes', selectedOptions.map(option => option.value))}
-                    styles={{
-                        control: (base) => ({
-                            ...base,
-                            borderColor: errors.classes ? 'red' : base.borderColor,
-                        }),
-                    }}
+                <label htmlFor="title" className="flex items-center text-sm font-medium text-gray-700">
+                    <AiOutlineUser className="mr-2 text-gray-500" /> Semestre
+                </label>
+                <input
+                    id="title"
+                    type="text"
+                    {...register('name')}
+                    className={`mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.name ? 'border-red-500' : ''}`}
                 />
-                {errors.classes && <span className="text-red-500 text-sm">{errors.classes.message}</span>}
+                {errors.semester && <span className="text-red-500 text-sm">{errors.semester.message}</span>}
             </div>
 
             {/* Botão de Enviar */}
@@ -158,4 +152,4 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
     );
 };
 
-export default AnnouncementForm;
+export default ClassForm;

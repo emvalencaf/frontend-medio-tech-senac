@@ -19,6 +19,8 @@ const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
                 <div className="w-1/4">Nome</div>
                 <div className="w-1/4">Semestre</div>
                 <div className="w-1/4">Ano</div>
+                <div className='w-1/4'>Criada  em:</div>
+                <div className='w-1/4'>Atualizada em:</div>
                 <div className="w-1/4">Horário</div>
                 <div className="w-1/4">Ações</div>
             </div>
