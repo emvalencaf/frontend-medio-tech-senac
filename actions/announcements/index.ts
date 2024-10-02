@@ -9,7 +9,7 @@ import { IAnnouncementEntity, IGetAnnouncementsResponse, } from "./types";
 
 const BACKEND_URL = `${process.env.BACKEND_URL}/announcements`;
 
-export const createAnnouncement = async (announcement: AnnouncementFormData): Promise<IAnnouncementEntity | null> => {
+export const createAnnouncement = async (announcement: AnnouncementFormData, token: string): Promise<IAnnouncementEntity | null> => {
     const { title, content, classes } = announcement;
 
     // Verifica se classes não está vazio
@@ -21,10 +21,12 @@ export const createAnnouncement = async (announcement: AnnouncementFormData): Pr
     const classIds = classes.join(',');
 
     const url = `${BACKEND_URL}/send/${classIds}`;
+    
     try {
         const res = await axios.post(url, { title, content }, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
         });
 

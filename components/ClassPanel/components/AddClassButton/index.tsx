@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FaBullhorn } from 'react-icons/fa';
+
+import { SiGoogleclassroom } from 'react-icons/si';
 
 interface AddAnnouncementButtonProps {
     onClick: () => void;
@@ -15,7 +16,7 @@ const AddClassButton: React.FC<AddAnnouncementButtonProps> = ({ onClick }) => {
             onMouseEnter={() => setShowLabel(true)}
             onMouseLeave={() => setShowLabel(false)}
         >
-            <FaBullhorn className="text-xl" />
+            <SiGoogleclassroom className="text-xl" />
             <span className={` ${showLabel ? 'opacity-100' : 'opacity-0 hidden md:inline-block'} transition-opacity duration-300 ease-in-out`}>
                 Adicionar Turma
             </span>

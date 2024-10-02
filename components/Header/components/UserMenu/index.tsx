@@ -1,8 +1,11 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { userMenuButtons } from "../../../../constants/userMenu";
 import AvatarProfile from "../AvatarProfile";
 import UserMenuButton from "../UserButton";
+import { extractUserTypeFromBackEndToken } from "../../../../utils";
+import { userTypes } from "../../../../constants/userType";
 
 /*
     React.Node para enviar ao Bell caso tenha novas notificações:
@@ -12,6 +15,11 @@ import UserMenuButton from "../UserButton";
 */
 
 const UserMenu: React.FC = () => {
+    const { data } = useSession();
+
+    const name = String(data?.user?.name);
+    const userType: 'TEACHER' | 'COORDINATOR' | 'STUDENT' = extractUserTypeFromBackEndToken(String(data?.backendToken));
+    
     return (
         <div className="flex items-center space-x-6">
 
@@ -20,8 +28,8 @@ const UserMenu: React.FC = () => {
             }
             <AvatarProfile
                 img_path="/assets/avatar.png"
-                name="João Campos"
-                userType="Prefeito de Luiz Paulo & Iago"
+                name={name}
+                userType={userTypes[userType]}
             />
         </div>
     );

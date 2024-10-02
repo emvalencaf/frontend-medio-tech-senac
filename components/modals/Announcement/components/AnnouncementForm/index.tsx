@@ -17,7 +17,6 @@ import { AiOutlineUser, AiOutlineFileText } from 'react-icons/ai'; // Ícones pa
 import { AnnouncementFormData, announcementSchema } from '../../../../../actions/announcements/schemas';
 import { IAnnouncementEntity } from '../../../../../actions/announcements/types';
 import { IClassEntity } from '../../../../../actions/classes/types';
-import { useSession } from 'next-auth/react';
 
 export interface IClassOptions {
     value: number;
@@ -27,26 +26,23 @@ export interface IClassOptions {
 // interfaces
 export interface IAnnouncementForm {
     handleActionCreate: (data: AnnouncementFormData) => Promise<IAnnouncementEntity | null>;
-    handleActionGetClassOptions: (authorId: number) => Promise<IClassEntity[] | null>;
+    handleActionGetClassOptions: () => Promise<IClassEntity[] | null>;
 }
 
 const AnnouncementForm: React.FC<IAnnouncementForm> = ({
     handleActionCreate,
     handleActionGetClassOptions,
 }) => {
-    const session = useSession();
-
-    const authorId = Number(session.data?.user?.id);
-
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<AnnouncementFormData>({
         resolver: zodResolver(announcementSchema),
     });
-    
+
     const { onClose } = useAnnouncementModal();
 
-    // const [authorId, setAuthorId] = useState(session.data?.user?.id);// will change with authentication
     const [classOptions, setClassOptions] = useState<IClassOptions[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [loadingClassOptions, setLoadingClassOptions] = useState(true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [errorClassOptions, setErrorClassOptions] = useState<string | null>(null);
 
     useEffect(() => {
@@ -54,7 +50,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             setLoadingClassOptions(true);
             setErrorClassOptions(null);
             try {
-                const data = await handleActionGetClassOptions(authorId);
+                const data = await handleActionGetClassOptions();
 
                 if (!data)
                     return setClassOptions([]);
@@ -64,7 +60,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
                     label: classItem.name,
                 }));
                 setClassOptions(options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
                 setErrorClassOptions('Failed to fetch classes');
             } finally {
@@ -72,10 +68,8 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             }
         };
 
-        if (authorId) {
-            fetchClasses();
-        }
-    }, [authorId, handleActionGetClassOptions]);
+        fetchClasses();
+    }, [handleActionGetClassOptions]);
 
     const onSubmit = async (data: AnnouncementFormData) => {
         try {
@@ -84,7 +78,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             onClose();
             // toast.success('Announcement created successfully!');
             window.location.reload();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.log(error);
             const errorsMsg = error.message;

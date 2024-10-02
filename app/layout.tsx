@@ -15,6 +15,8 @@ import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
 import NotificationProvider from "../providers/NotificationProvider";
 import { IHandleActionClass } from "../types/class";
+import { ClassFormData } from "../actions/classes/schemas";
+import { extractUserIdFromBackEndToken } from "../utils";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -40,26 +42,30 @@ export default async function RootLayout({
 }>) {
     const session = await auth();
 
+    const token = String(session?.backendToken);
+
     const handleActionsAnnouncement: IHandleActionAnnouncement = {
         handleActionCreate: async (data) => {
             "use server";
-            return createAnnouncement(data);
+            return createAnnouncement(data, token);
         },
-        handleActionGetClassesByTeacher: async (authorId) => {
+        handleActionGetClassesByTeacher: async () => {
             "use server";
-            return getAllByTeacher(authorId);
+            console.log('é o que: ',session?.user);
+            const teacherId = extractUserIdFromBackEndToken(token);
+            return getAllByTeacher(Number(teacherId), token);
         },
         handleActionGetAllClasses: async () => {
             "use server";
-            return getAllClasses();
+            return (await getAllClasses(token))?.data;
         },
     }
 
     const handleActionsClass: IHandleActionClass = {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        handleActionCreate: async (data: any) => {
+        handleActionCreate: async (data: ClassFormData) => {
             "use server";
-            return createClass(data);
+            return createClass(data, token);
         },
     }
 

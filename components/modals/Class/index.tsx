@@ -18,8 +18,8 @@ export interface IClassModal {
 const ClassModal: React.FC<IClassModal> = ({
     handleActions,
 }) => {
-    const { isOpen, onClose, typeClassModal, classId, actionPanelStatus } = useClassModal();
-    const { handleActionCreate, handleActionGetClassesByTeacher } = handleActions;
+    const { isOpen, onClose, typeClassModal, actionPanelStatus } = useClassModal();
+    const { handleActionCreate } = handleActions;
 
     const title = typeClassModal === 'CREATE_CLASS' ? 'Adicione Turma' : (typeClassModal === "ACTION_CLASS" ? "ALTERE/DELETE TURMA" : 'VEJA OS PROFESSORES DA TURMA');
 
@@ -27,21 +27,26 @@ const ClassModal: React.FC<IClassModal> = ({
 
     return (
         <Modal title={title} subtitle={subtitle} onClose={onClose} isOpen={isOpen}>
+            {/* FORM TO CREATE CLASS */}
             {
                 typeClassModal === 'CREATE_CLASS' && (
-                    <ClassForm handleActionCreate={handleActionCreate} handleActionGetClassOptions={handleActionGetClassesByTeacher} />
+                    <ClassForm handleActionCreate={handleActionCreate} />
                 )
             }
+            {/* ACTION PANEL OF CLASS */}
+
             {
                 (typeClassModal === 'ACTION_CLASS' && actionPanelStatus === 'PANEL') && (
                     <ActionPanel />
                 )
             }
+            {/* FORM TO EDIT CLASS */}
             {
                 (typeClassModal === 'ACTION_CLASS' && actionPanelStatus === 'EDIT') && (
-                    <ClassForm handleActionCreate={handleActionCreate} handleActionGetClassOptions={handleActionGetClassesByTeacher} />
+                    <ClassForm handleActionCreate={handleActionCreate} />
                 )
             }
+            {/* TO VIEW CLASS SUBJECTS */}
             {
                 typeClassModal === "VIEW_CLASS_SUBJECTS" && (
                     <div>
@@ -49,9 +54,6 @@ const ClassModal: React.FC<IClassModal> = ({
                     </div>
                 )
             }
-            {/*
-                Quando implementar o sistema de autenticação e autorização vai ter que passar o handleActionGetClassesByTeacher e handleActionGetClasses a depender do tipo do usuário.
-            */}
         </Modal>
     );
 };
