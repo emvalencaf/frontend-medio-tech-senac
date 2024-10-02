@@ -21,7 +21,7 @@ const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year, createdAt, 
     const handleClickButton = (typeClassModal: "VIEW_CLASS_SUBJECTS" | "ACTION_CLASS" | "CREATE_CLASS") => {
         if (typeClassModal !== "CREATE_CLASS")
             return onOpen(typeClassModal, id);
-
+            
         onOpen(typeClassModal);
     }
 
@@ -36,7 +36,13 @@ const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year, createdAt, 
             <button className="w-1/4" onClick={() => handleClickButton('VIEW_CLASS_SUBJECTS')}>
                 <GiTeacher />
             </button>
-            <button className="w-1/4" onClick={() => handleClickButton('ACTION_CLASS')}>
+            {
+                
+            }
+            <button className="w-1/4" onClick={() => {
+                handleClickButton('ACTION_CLASS')
+
+            }}>
                 <BsThreeDots />
             </button>
         </li>

@@ -13,33 +13,47 @@ import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineUser } from 'react-icons/ai'; // Ícones para os campos
 
 // schemas and types
-import { ClassFormData, classSchema } from '../../../../../actions/classes/schemas';
+import { ClassFormData, ClassFormDataPartialUpdate, classSchema, partialUpdateClassSchema } from '../../../../../actions/classes/schemas';
 import { IClassEntity } from '../../../../../actions/classes/types';
 
 
 
 // interfaces
 export interface IClassForm {
-    handleActionCreate: (data: ClassFormData) => Promise<IClassEntity | null>;
+    handleActionCreate?: (data: ClassFormData) => Promise<IClassEntity | null>;
+    handleActionPartialUpdate?: (classId: number, data: ClassFormDataPartialUpdate) => Promise<IClassEntity | null>;
+    isCreate?: boolean;
+    initialValues?: Partial<ClassFormData>;
+    classId?: number;
 }
 
 const ClassForm: React.FC<IClassForm> = ({
     handleActionCreate,
+    handleActionPartialUpdate,
+    isCreate = true,
+    initialValues,
+    classId,
 }) => {
+
+    const schema = isCreate ? classSchema : partialUpdateClassSchema;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<ClassFormData>({
-        resolver: zodResolver(classSchema),
+        resolver: zodResolver(schema),
+        defaultValues: initialValues || {},
     });
 
     const { onClose } = useClassModal();
 
     const onSubmit = async (data: ClassFormData) => {
         try {
-            const res = await handleActionCreate(data);
-            console.log('Form data:', res);
+            if (handleActionCreate && isCreate)
+                await handleActionCreate(data);
+            if (handleActionPartialUpdate && !isCreate)
+                await handleActionPartialUpdate(Number(classId), data);
             onClose();
-            toast.success('Class created successfully!');
+            toast.success(`Class ${isCreate ? "created" : "updated"} successfully!`);
+            window.location.reload();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.log(error);
@@ -49,7 +63,7 @@ const ClassForm: React.FC<IClassForm> = ({
                     toast.error(msg);
                 });
             } else {
-                toast.error('Failed to create class.');
+                toast.error(`Failed to ${isCreate ? "create" : 'update'} class.`);
             }
         }
     };

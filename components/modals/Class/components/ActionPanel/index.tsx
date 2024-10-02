@@ -12,7 +12,7 @@ const ActionPanel: React.FC = () => {
             <ActionButton
                 label="Editar Turma"
                 Icon={FaEdit}
-                handleClick={() => onChangePanelStatus('EDIT')}
+                handleClick={() =>{onChangePanelStatus('EDIT')}}
             />
 
             <ActionButton

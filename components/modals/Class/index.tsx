@@ -10,6 +10,8 @@ import ClassForm from './components/ClassForm';
 // types
 import { IHandleActionClass } from '../../../types/class';
 import ActionPanel from './components/ActionPanel';
+import { useEffect, useState } from 'react';
+import { ClassFormData } from '../../../actions/classes/schemas';
 
 export interface IClassModal {
     handleActions: IHandleActionClass;
@@ -18,12 +20,33 @@ export interface IClassModal {
 const ClassModal: React.FC<IClassModal> = ({
     handleActions,
 }) => {
-    const { isOpen, onClose, typeClassModal, actionPanelStatus } = useClassModal();
-    const { handleActionCreate } = handleActions;
+    const { isOpen, onClose, typeClassModal, actionPanelStatus, classId } = useClassModal();
+    const { handleActionCreate, handleActionPartialUpdate, handleActionGetById } = handleActions;
+    const [classValues, setClassValues] = useState<ClassFormData>();
 
     const title = typeClassModal === 'CREATE_CLASS' ? 'Adicione Turma' : (typeClassModal === "ACTION_CLASS" ? "ALTERE/DELETE TURMA" : 'VEJA OS PROFESSORES DA TURMA');
 
     const subtitle = typeClassModal === 'CREATE_CLASS' ? 'Adicione uma turma' : (typeClassModal === "ACTION_CLASS" ? "Altere ou delete uma turma" : 'Veja os professores responsáveis pelas disciplinas');
+
+    useEffect(() => {
+        if (actionPanelStatus === 'EDIT') {
+            const fn = async () => {
+                const res = await handleActionGetById(Number(classId));
+                if (!res)
+                    return;
+                
+                console.log(classId);
+
+                setClassValues({
+                    name: res.name,
+                    year: res.year,
+                    semester: res.semester,
+                });
+            }
+
+            fn();
+        }
+    }, [actionPanelStatus, classId, handleActionGetById]);
 
     return (
         <Modal title={title} subtitle={subtitle} onClose={onClose} isOpen={isOpen}>
@@ -43,7 +66,7 @@ const ClassModal: React.FC<IClassModal> = ({
             {/* FORM TO EDIT CLASS */}
             {
                 (typeClassModal === 'ACTION_CLASS' && actionPanelStatus === 'EDIT') && (
-                    <ClassForm handleActionCreate={handleActionCreate} />
+                    <ClassForm handleActionPartialUpdate={handleActionPartialUpdate} isCreate={false} classId={classId} initialValues={classValues} />
                 )
             }
             {/* TO VIEW CLASS SUBJECTS */}

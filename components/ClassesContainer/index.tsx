@@ -4,6 +4,8 @@ import React from 'react';
 
 // custom components
 import ClassItem, { IClassItem } from '../ClassItem';
+import { useSession } from 'next-auth/react';
+import { extractUserTypeFromBackEndToken } from '../../utils';
 
 export interface IClassContainer {
     classes: IClassItem[];
@@ -11,6 +13,10 @@ export interface IClassContainer {
 
 
 const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
+    const session = useSession();
+    
+    const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));
+
     return (
         <div className="w-full h-full p-4">
             {/* Cabeçalho simulando as colunas da tabela */}
@@ -22,7 +28,7 @@ const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
                 <div className='w-1/4'>Criada  em:</div>
                 <div className='w-1/4'>Atualizada em:</div>
                 <div className="w-1/4">Horário</div>
-                <div className="w-1/4">Ações</div>
+                {userType === "COORDINATOR" && <div className="w-1/4">Ações</div>}
             </div>
 
             {/* Lista de itens com aparência de tabela */}

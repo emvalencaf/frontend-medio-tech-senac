@@ -10,12 +10,12 @@ import ToasterProvider from "../providers/ToasterProvider";
 import ModalProvider from "../providers/ModalProvider";
 import { IHandleActionAnnouncement } from "../types/announcement";
 import { createAnnouncement } from "../actions/announcements";
-import { createClass, getAllByTeacher, getAllClasses } from "../actions/classes";
+import { createClass, getAllByTeacher, getAllClasses, getClassById, partialUpdateClass } from "../actions/classes";
 import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
 import NotificationProvider from "../providers/NotificationProvider";
 import { IHandleActionClass } from "../types/class";
-import { ClassFormData } from "../actions/classes/schemas";
+import { ClassFormData, ClassFormDataPartialUpdate } from "../actions/classes/schemas";
 import { extractUserIdFromBackEndToken } from "../utils";
 
 const geistSans = localFont({
@@ -67,6 +67,14 @@ export default async function RootLayout({
             "use server";
             return createClass(data, token);
         },
+        handleActionPartialUpdate: async (classId: number, data: ClassFormDataPartialUpdate) => {
+            "use server";
+            return partialUpdateClass(classId, data, token);
+        },
+        handleActionGetById: async (classId: number) => {
+            "use server";
+            return getClassById(classId, token);
+        }
     }
 
     return (
