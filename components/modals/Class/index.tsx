@@ -21,7 +21,7 @@ const ClassModal: React.FC<IClassModal> = ({
     handleActions,
 }) => {
     const { isOpen, onClose, typeClassModal, actionPanelStatus, classId } = useClassModal();
-    const { handleActionCreate, handleActionPartialUpdate, handleActionGetById } = handleActions;
+    const { handleActionCreate, handleActionPartialUpdate, handleActionGetById, handleActionDeleteById } = handleActions;
     const [classValues, setClassValues] = useState<ClassFormData>();
 
     const title = typeClassModal === 'CREATE_CLASS' ? 'Adicione Turma' : (typeClassModal === "ACTION_CLASS" ? "ALTERE/DELETE TURMA" : 'VEJA OS PROFESSORES DA TURMA');
@@ -34,7 +34,7 @@ const ClassModal: React.FC<IClassModal> = ({
                 const res = await handleActionGetById(Number(classId));
                 if (!res)
                     return;
-                
+
                 console.log(classId);
 
                 setClassValues({
@@ -46,7 +46,7 @@ const ClassModal: React.FC<IClassModal> = ({
 
             fn();
         }
-    }, [actionPanelStatus, classId, handleActionGetById]);
+    }, [actionPanelStatus, isOpen, classId, handleActionGetById]);
 
     return (
         <Modal title={title} subtitle={subtitle} onClose={onClose} isOpen={isOpen}>
@@ -60,7 +60,7 @@ const ClassModal: React.FC<IClassModal> = ({
 
             {
                 (typeClassModal === 'ACTION_CLASS' && actionPanelStatus === 'PANEL') && (
-                    <ActionPanel />
+                    <ActionPanel handleActionDeleteById={handleActionDeleteById} />
                 )
             }
             {/* FORM TO EDIT CLASS */}

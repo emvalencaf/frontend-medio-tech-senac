@@ -5,8 +5,18 @@ import { PiStudent } from 'react-icons/pi'
 import useClassModal from "../../../../../hooks/useClassModal";
 import ActionButton from "../../../../ActionButton";
 
-const ActionPanel: React.FC = () => {
-    const { onChangePanelStatus } = useClassModal();
+export interface IActionPanel {
+    handleActionDeleteById: (classId: number) => Promise<void>;
+}
+
+const ActionPanel: React.FC<IActionPanel> = ({ handleActionDeleteById }) => {
+    const { onChangePanelStatus, classId } = useClassModal();
+
+    const handleClick = async () => {
+        await handleActionDeleteById(Number(classId));
+        window.location.reload();
+    }
+
     return (
         <div className="flex gap-4 items-center justify-center">
             <ActionButton
@@ -30,7 +40,7 @@ const ActionPanel: React.FC = () => {
             <ActionButton
                 label="Deletar"
                 Icon={FaTrash}
-                handleClick={() => {}}
+                handleClick={handleClick}
             />
         </div>
     );

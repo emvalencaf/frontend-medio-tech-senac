@@ -10,7 +10,7 @@ import ToasterProvider from "../providers/ToasterProvider";
 import ModalProvider from "../providers/ModalProvider";
 import { IHandleActionAnnouncement } from "../types/announcement";
 import { createAnnouncement } from "../actions/announcements";
-import { createClass, getAllByTeacher, getAllClasses, getClassById, partialUpdateClass } from "../actions/classes";
+import { createClass, deleteClass, getAllByTeacher, getAllClasses, getClassById, partialUpdateClass } from "../actions/classes";
 import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
 import NotificationProvider from "../providers/NotificationProvider";
@@ -74,6 +74,10 @@ export default async function RootLayout({
         handleActionGetById: async (classId: number) => {
             "use server";
             return getClassById(classId, token);
+        },
+        handleActionDeleteById: async (classId: number) => {
+            "use server";
+            return deleteClass(classId, token);
         }
     }
 
