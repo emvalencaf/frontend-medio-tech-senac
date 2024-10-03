@@ -12,6 +12,7 @@ import { IHandleActionClass } from "../../types/class";
 import { IHandleActionCoordinator } from "../../types/coordinator";
 import { IHandleActionTeacher } from "../../types/teachers";
 import { IHandleActionSubject } from "../../types/subject";
+import { IHandleActionStudent } from "../../types/students";
 
 // interfaces
 export interface IModalProvider {
@@ -20,6 +21,7 @@ export interface IModalProvider {
     handleActionsCoordinator: IHandleActionCoordinator;
     handleActionsTeacher: IHandleActionTeacher;
     handleActionsSubject: IHandleActionSubject;
+    handleActionsStudent: IHandleActionStudent;
 }
 
 const ModalProvider: React.FC<IModalProvider> = ({
@@ -27,7 +29,8 @@ const ModalProvider: React.FC<IModalProvider> = ({
     handleActionsClass,
     handleActionsCoordinator,
     handleActionsSubject,
-    handleActionsTeacher
+    handleActionsTeacher,
+    handleActionsStudent,
 }) => {
 
     const [isMounted, setIsMounted] = useState(false);
@@ -47,6 +50,8 @@ const ModalProvider: React.FC<IModalProvider> = ({
                 handleActionPartialUpdateTeachingAssignment={handleActionsCoordinator.handleActionPartialUpdateTeachingAssignment}
                 handleActionCreateTeachingAssignment={handleActionsCoordinator.handleActionCreateTeachingAssignment}
                 handleActionGetTeachingAssignmentById={handleActionsCoordinator.handleActionGetTeachingAssignmentById}
+                handleActionGetAllStudents={handleActionsStudent.handleActionGetAll}
+                handleActionAddStudentToClass={handleActionsCoordinator.handleActionAddStudentToClass}
             />
         </>
     );

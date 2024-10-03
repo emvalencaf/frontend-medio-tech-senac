@@ -1,4 +1,4 @@
-import { AiOutlineSend, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineSend } from "react-icons/ai";
 import useClassModal from "../../../../../hooks/useClassModal";
 import { useForm } from "react-hook-form";
 import { partialUpdateTeachingAssignmentSchema, TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate, teachingAssignmentSchema } from "../../../../../actions/coordinators/schemas";
@@ -84,6 +84,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
             })
         }
         
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         teachingAssignmentId && fetchAssignmentTeaching(teachingAssignmentId);
 
     }, [teachingAssignmentId]);
@@ -92,10 +93,12 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
     useEffect(() => {
         const fetchSubjectsAndTeachers = async (isTeacherOptions: boolean) => {
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             isTeacherOptions ?
                 setLoadingTeacherOptions(true)
                 : setLoadingSubjectOptions(true);
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             isTeacherOptions ?
                 setErrorTeacherOptions(null)
                 : setErrorSubjectOptions(null);
@@ -111,11 +114,14 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
                     label: isTeacherOptions ? (dataItem as ITeacherEntity).firstName + ' ' + (dataItem as ITeacherEntity).lastName : (dataItem as ISubjectEntity).name,
                 }));
 
+                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                 isTeacherOptions ? setTeacherOptions(options) : setSubjectOptions(options);
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                 isTeacherOptions ? setErrorTeacherOptions('Failed to fetch teachers') : setErrorSubjectOptions('Failed to fetch subjects');
             } finally {
+                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                 isTeacherOptions ? setLoadingTeacherOptions(false) : setLoadingSubjectOptions(false);
             }
         };
@@ -129,6 +135,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
             console.log(data);
             console.log('in onSubmit: ',isCreate);
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             isCreate ?
                 await handleActionCreateTeachingAssignment(Number(classId), data) :
                 await handleActionPartialUpdateTeachingAssignment(Number(teachingAssignmentId), data);

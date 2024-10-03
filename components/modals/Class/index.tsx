@@ -17,7 +17,9 @@ import { ITeacherEntity } from '../../../actions/teachers/types';
 import { ISubjectEntity } from '../../../actions/subjects/types';
 import TeachingAssignmentForm from './components/TeachingAssignmentForm';
 import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } from '../../../actions/coordinators/schemas';
-import { ITeachingAssignmentEntity } from '../../../actions/coordinators/types';
+import { IResponseAddStudentForm, ITeachingAssignmentEntity } from '../../../actions/coordinators/types';
+import { IStudentEntity } from '../../../actions/students/types';
+import AddStudentForm from './components/AddStudentForm';
 
 export interface IClassModal {
     handleActions: IHandleActionClass;
@@ -27,15 +29,19 @@ export interface IClassModal {
     handleActionCreateTeachingAssignment: (classId: number, data: TeachingAssignmentFormData) => Promise<ITeachingAssignmentEntity | null>;
     handleActionPartialUpdateTeachingAssignment: (teachingAssignmentId: number, data: TeachingAssignmentFormDataPartialUpdate) => Promise<ITeachingAssignmentEntity | null>;
     handleActionGetTeachingAssignmentById: (teachingAssignmentId: number) => Promise<ITeachingAssignmentEntity | null>;
+    handleActionGetAllStudents: (showRels?: boolean) => Promise<IStudentEntity[] | null>;
+    handleActionAddStudentToClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;
 }
 
 const ClassModal: React.FC<IClassModal> = ({
     handleActions,
+    handleActionAddStudentToClass,
     handleActionDeleteTeachingAssignmentById,
     handleActionGetTeachingAssignmentById,
     handleActionCreateTeachingAssignment,
     handleActionPartialUpdateTeachingAssignment,
     handleActionGetAllTeachers,
+    handleActionGetAllStudents,
     handleActionsGetAllSubjects,
 }) => {
     const { isOpen, onClose, typeClassModal, actionPanelStatus, classId } = useClassModal();
@@ -96,6 +102,18 @@ const ClassModal: React.FC<IClassModal> = ({
                     <ClassForm handleActionPartialUpdate={handleActionPartialUpdate} isCreate={false} classId={classId} initialValues={classValues} />
                 )
             }
+
+            {/* FORM TO ADD STUDENT */}
+
+            {
+                (typeClassModal === 'ACTION_CLASS' && actionPanelStatus === 'ADD_STUDENT') && (
+                    <AddStudentForm
+                        handleActionAddStudentToClass={handleActionAddStudentToClass}
+                        handleActionGetAllStudents={handleActionGetAllStudents}
+                    />
+                )
+            }
+            
             {/* TO VIEW CLASS SUBJECTS */}
             {
                 (typeClassModal === "VIEW_CLASS_SUBJECTS") && (

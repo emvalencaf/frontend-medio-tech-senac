@@ -18,12 +18,14 @@ import { IHandleActionClass } from "../types/class";
 import { ClassFormData, ClassFormDataPartialUpdate } from "../actions/classes/schemas";
 import { extractUserIdFromBackEndToken } from "../utils";
 import { IHandleActionCoordinator } from "../types/coordinator";
-import { createTeachingAssignment, deleteTeachingAssignmentById, getTeachingAssignmentById, partialUpdateTeachingAssignment } from "../actions/coordinators";
+import { addStudentToClass, createTeachingAssignment, deleteTeachingAssignmentById, getTeachingAssignmentById, partialUpdateTeachingAssignment } from "../actions/coordinators";
 import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } from "../actions/coordinators/schemas";
 import { IHandleActionTeacher } from "../types/teachers";
 import { getAllTeachers } from "../actions/teachers";
 import { IHandleActionSubject } from "../types/subject";
 import { getAllSubjects } from "../actions/subjects";
+import { IHandleActionStudent } from "../types/students";
+import { getAllStudents } from "../actions/students";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -104,6 +106,10 @@ export default async function RootLayout({
         handleActionGetTeachingAssignmentById: async (teachingAssignmentId: number) => {
             "use server";
             return getTeachingAssignmentById(teachingAssignmentId, token);
+        },
+        handleActionAddStudentToClass: async (studentId: number, classId: number) => {
+            "use server";
+            return addStudentToClass(studentId, classId, token);
         }
     }
 
@@ -111,6 +117,13 @@ export default async function RootLayout({
         handleActionGetAll: async () => {
             "use server";
             return getAllTeachers(token);
+        }
+    }
+
+    const handleActionsStudent: IHandleActionStudent = {
+        handleActionGetAll: async () => {
+            "use server";
+            return getAllStudents(token);
         }
     }
 
@@ -134,6 +147,7 @@ export default async function RootLayout({
                         handleActionsCoordinator={handleActionsCoordinator}
                         handleActionsSubject={handleActionsSubject}
                         handleActionsTeacher={handleActionsTeacher}
+                        handleActionsStudent={handleActionsStudent}
                     />
                     <ToasterProvider />
                     {session && <Sidebar />}
