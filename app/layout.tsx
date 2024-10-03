@@ -17,6 +17,13 @@ import NotificationProvider from "../providers/NotificationProvider";
 import { IHandleActionClass } from "../types/class";
 import { ClassFormData, ClassFormDataPartialUpdate } from "../actions/classes/schemas";
 import { extractUserIdFromBackEndToken } from "../utils";
+import { IHandleActionCoordinator } from "../types/coordinator";
+import { createTeachingAssignment, deleteTeachingAssignmentById, getTeachingAssignmentById, partialUpdateTeachingAssignment } from "../actions/coordinators";
+import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } from "../actions/coordinators/schemas";
+import { IHandleActionTeacher } from "../types/teachers";
+import { getAllTeachers } from "../actions/teachers";
+import { IHandleActionSubject } from "../types/subject";
+import { getAllSubjects } from "../actions/subjects";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -51,7 +58,7 @@ export default async function RootLayout({
         },
         handleActionGetClassesByTeacher: async () => {
             "use server";
-            console.log('é o que: ',session?.user);
+            console.log('é o que: ', session?.user);
             const teacherId = extractUserIdFromBackEndToken(token);
             return getAllByTeacher(Number(teacherId), token);
         },
@@ -71,13 +78,46 @@ export default async function RootLayout({
             "use server";
             return partialUpdateClass(classId, data, token);
         },
-        handleActionGetById: async (classId: number) => {
+        handleActionGetById: async (classId: number, showRels: boolean = false) => {
             "use server";
-            return getClassById(classId, token);
+            return getClassById(classId, token, showRels);
         },
         handleActionDeleteById: async (classId: number) => {
             "use server";
             return deleteClass(classId, token);
+        }
+    }
+
+    const handleActionsCoordinator: IHandleActionCoordinator = {
+        handleActionDeleteTeachingAssignmentById: async (teachingAssignmentId: number) => {
+            "use server";
+            return deleteTeachingAssignmentById(teachingAssignmentId, token);
+        },
+        handleActionCreateTeachingAssignment: async (classId: number, data: TeachingAssignmentFormData) => {
+            "use server";
+            return createTeachingAssignment(classId, data, token);
+        },
+        handleActionPartialUpdateTeachingAssignment: async (teachingAssignmentId: number, data: TeachingAssignmentFormDataPartialUpdate) => {
+            "use server";
+            return partialUpdateTeachingAssignment(teachingAssignmentId, data, token);
+        },
+        handleActionGetTeachingAssignmentById: async (teachingAssignmentId: number) => {
+            "use server";
+            return getTeachingAssignmentById(teachingAssignmentId, token);
+        }
+    }
+
+    const handleActionsTeacher: IHandleActionTeacher = {
+        handleActionGetAll: async () => {
+            "use server";
+            return getAllTeachers(token);
+        }
+    }
+
+    const handleActionsSubject: IHandleActionSubject = {
+        handleActionGetAll: async (classId?: number) => {
+            "use server";
+            return getAllSubjects(token, classId);
         }
     }
 
@@ -88,7 +128,13 @@ export default async function RootLayout({
             >
                 <SessionProvider session={session}>
                     <NotificationProvider />
-                    <ModalProvider handleActionsAnnouncement={handleActionsAnnouncement} handleActionsClass={handleActionsClass} />
+                    <ModalProvider
+                        handleActionsAnnouncement={handleActionsAnnouncement}
+                        handleActionsClass={handleActionsClass}
+                        handleActionsCoordinator={handleActionsCoordinator}
+                        handleActionsSubject={handleActionsSubject}
+                        handleActionsTeacher={handleActionsTeacher}
+                    />
                     <ToasterProvider />
                     {session && <Sidebar />}
                     <main className="flex justify-center items-center w-full">

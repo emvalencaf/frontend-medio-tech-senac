@@ -1,10 +1,13 @@
 import axios from "axios";
+import { ISubjectEntity } from "./types";
 
 const BACKEND_URL = `${process.env.BACKEND_URL}/subjects`
 
-export const getAllSubjects = async (token: string) => {
+export const getAllSubjects = async ( token: string, excludeByClassId?: number): Promise<ISubjectEntity[] | null> => {
     try {
-        const res = await axios.get(`${BACKEND_URL}`, {
+        const url = BACKEND_URL + (excludeByClassId ? `?excludeByClassId=${excludeByClassId}` : '');
+
+        const res = await axios.get(url, {
             'headers': {
                 'Authorization': `Bearer ${token}`,
             },

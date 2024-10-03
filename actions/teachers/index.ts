@@ -1,8 +1,9 @@
 import axios from "axios";
+import { ITeacherEntity } from "./types";
 
 const BACKEND_URL = `${process.env.BACKEND_URL}/teachers`
 
-export const getAllTeachers = async (token: string) => {
+export const getAllTeachers = async (token: string): Promise<ITeacherEntity[] | null> => {
     try {
         const res = await axios.get(`${BACKEND_URL}`, {
             'headers': {
