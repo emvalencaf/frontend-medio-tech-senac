@@ -12,3 +12,7 @@ export interface ITeachingAssignmentEntity {
         lastName: string;
     };
 }
+
+export interface IResponseAddStudentForm {
+    message: string;
+}

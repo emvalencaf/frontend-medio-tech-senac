@@ -17,3 +17,10 @@ export const partialUpdateTeachingAssignmentSchema = z.object({
 }).optional();
 
 export type TeachingAssignmentFormDataPartialUpdate = z.infer<typeof partialUpdateTeachingAssignmentSchema>;
+
+export const  addStudentSchema = z.object({
+    studentId: z.number().int().positive('Estudante é um campo obrigatório')
+      .transform(value => value),
+});
+
+export type AddStudentFormData = z.infer<typeof addStudentSchema>;
