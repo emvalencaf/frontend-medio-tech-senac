@@ -1,3 +1,5 @@
+import { ITeachingAssignmentEntity } from "../../coordinators/types";
+
 export interface IClassEntity {
     id: number;
     name: string;
@@ -5,7 +7,9 @@ export interface IClassEntity {
     year: number;
     createdAt: Date;
     updatedAt: Date;
+    TeachingAssignment?: ITeachingAssignmentEntity[]
 }
+
 
 export interface IGetClassesQueryParams {
     order?: 'asc' | 'desc';
