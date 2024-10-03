@@ -15,15 +15,16 @@ export interface IOptions {
 }
 
 export interface IAddStudentForm {
-    handleActionGetAllStudents: (showRels?: boolean) => Promise<IStudentEntity[] | null>;
-    handleActionAddStudentToClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;
+    handleActionGetAllStudents: (showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number) => Promise<IStudentEntity[] | null>;
+    handleActionAddStudentToClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;handleActionRemoveStudentFromClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;
 }
 
-const AddStudentForm: React.FC<IAddStudentForm> = ({
+const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
     handleActionAddStudentToClass,
     handleActionGetAllStudents,
+    handleActionRemoveStudentFromClass,
 }) => {
-    const { onClose, classId } = useClassModal();
+    const { onClose, classId, actionPanelStatus } = useClassModal();
 
     const [studentOptions, setStudentOptions] = useState<IOptions[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,7 +45,9 @@ const AddStudentForm: React.FC<IAddStudentForm> = ({
             setLoadingStudentOptions(true);
 
             try {
-                const data = await handleActionGetAllStudents();
+                const data = actionPanelStatus === 'ADD_STUDENT' ?
+                    await handleActionGetAllStudents()
+                    : await handleActionGetAllStudents(undefined, undefined, classId);
 
                 if (!data)
                     return setStudentOptions([]);
@@ -65,18 +68,21 @@ const AddStudentForm: React.FC<IAddStudentForm> = ({
         };
 
         fetchStudents();
-    }, []);
+    }, [classId]);
 
     const onSubmit = async (data: AddStudentFormData) => {
         try {
             if (!classId)
                 return toast.error('Turma não foi encontrada, tente de novo');
 
-            await handleActionAddStudentToClass(data.studentId, classId);
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            actionPanelStatus === "ADD_STUDENT" ?
+                await handleActionAddStudentToClass(data.studentId, classId)
+                : await handleActionRemoveStudentFromClass(data.studentId, classId);
 
             onClose();
 
-            toast.success(`A adição do estudante a turma foi bem-sucedida!`);
+            toast.success(`A ${actionPanelStatus === "ADD_STUDENT" ? "adição" : "remoção"} do estudante a turma foi bem-sucedida!`);
 
             window.location.reload();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,7 +94,7 @@ const AddStudentForm: React.FC<IAddStudentForm> = ({
                     toast.error(msg);
                 });
             } else {
-                toast.error(`A adição do aluno a turma falhou.`);
+                toast.error(`A ${actionPanelStatus === "ADD_STUDENT" ? "adição" : "remoção"} do aluno a turma falhou.`);
             }
         }
     };
@@ -96,7 +102,7 @@ const AddStudentForm: React.FC<IAddStudentForm> = ({
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 bg-white rounded-lg">
             <div>
-                <label htmlFor="studentId" className="block text-sm font-medium text-gray-700">Aluno</label>
+                <label htmlFor="studentId" className="block text-sm font-medium text-gray-700">Selecione um aluno</label>
                 <Select
                     options={studentOptions}
                     className="mt-1"
@@ -116,10 +122,14 @@ const AddStudentForm: React.FC<IAddStudentForm> = ({
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
                 <AiOutlineSend className="mr-2" />
-                Enviar
+                {
+                    actionPanelStatus === "ADD_STUDENT" ?
+                        "Adicionar Aluno"
+                        : "Remover Aluno"
+                }
             </button>
         </form>
     );
 }
 
-export default AddStudentForm;
+export default AddRemoveStudentForm;

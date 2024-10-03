@@ -162,7 +162,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 bg-white rounded-lg">
             <div>
-                <label htmlFor="teacherId" className="block text-sm font-medium text-gray-700">Classes</label>
+                <label htmlFor="teacherId" className="block text-sm font-medium text-gray-700">Selecione um Professor</label>
                 <Select
                     options={teacherOptions}
                     value={selectedTeacherOption}
@@ -179,7 +179,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
             </div>
 
             <div>
-                <label htmlFor="subjectId" className="block text-sm font-medium text-gray-700">Classes</label>
+                <label htmlFor="subjectId" className="block text-sm font-medium text-gray-700">Selecione uma matéria:</label>
                 <Select
                     options={subjectOptions}
                     value={selectedSubjectOption}

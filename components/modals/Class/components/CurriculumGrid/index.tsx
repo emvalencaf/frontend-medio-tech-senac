@@ -27,11 +27,11 @@ const CurriculumGrid: React.FC<ICurriculumGrid> = ({ handleActionGetById, handle
                     id: el.id,
                     teacher: {
                         id: el.teacherId,
-                        name: el.teacher.firstName + ' ' + el.teacher.lastName,
+                        name: el.teacher?.firstName + ' ' + el.teacher?.lastName,
                     },
                     subject: {
                         id: el.subjectId,
-                        name: el.subject.name,
+                        name: el?.subject?.name,
                     },
                 }
             })

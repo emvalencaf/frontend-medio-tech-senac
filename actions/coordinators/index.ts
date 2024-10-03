@@ -27,6 +27,28 @@ export const getTeachingAssignmentById = async (teachingAssignmentId: number, to
     }
 }
 
+export const removeStudentFromClass = async (studentId: number, classId: number, token: string): Promise<IResponseAddStudentForm | null> => {
+    try {
+        const res = await axios.patch(`${BACKEND_URL}/assign-student-class/students/${studentId}/classes/${classId}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        return res.data;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+        // Verifica se a resposta tem dados
+        if (err?.response && err?.response?.data) {
+            console.log(err?.response?.data);
+            throw new Error(Array.isArray(err?.response?.data?.message) ? err?.response?.data?.message.join(', ') : err?.response?.data.message);
+        } else {
+            throw new Error("Um erro desconhecido aconteceu.");
+        }
+    }
+}
+
 export const addStudentToClass = async (studentId: number, classId: number, token: string): Promise<IResponseAddStudentForm | null> => {
     try {
         const res = await axios.post(`${BACKEND_URL}/assign-student-class/students/${studentId}/classes/${classId}`, {}, {
@@ -115,7 +137,7 @@ export const partialUpdateTeachingAssignment = async (
         );
 
         return res.data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         // Verifica se a resposta tem dados
         if (err?.response && err?.response?.data) {

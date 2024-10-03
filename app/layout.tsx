@@ -18,7 +18,7 @@ import { IHandleActionClass } from "../types/class";
 import { ClassFormData, ClassFormDataPartialUpdate } from "../actions/classes/schemas";
 import { extractUserIdFromBackEndToken } from "../utils";
 import { IHandleActionCoordinator } from "../types/coordinator";
-import { addStudentToClass, createTeachingAssignment, deleteTeachingAssignmentById, getTeachingAssignmentById, partialUpdateTeachingAssignment } from "../actions/coordinators";
+import { addStudentToClass, createTeachingAssignment, deleteTeachingAssignmentById, getTeachingAssignmentById, partialUpdateTeachingAssignment, removeStudentFromClass } from "../actions/coordinators";
 import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } from "../actions/coordinators/schemas";
 import { IHandleActionTeacher } from "../types/teachers";
 import { getAllTeachers } from "../actions/teachers";
@@ -110,7 +110,11 @@ export default async function RootLayout({
         handleActionAddStudentToClass: async (studentId: number, classId: number) => {
             "use server";
             return addStudentToClass(studentId, classId, token);
-        }
+        },
+        handleActionRemoveStudentFromClass: async (studentId: number, classId: number) => {
+            "use server";
+            return removeStudentFromClass(studentId, classId, token);
+        },
     }
 
     const handleActionsTeacher: IHandleActionTeacher = {
@@ -121,9 +125,9 @@ export default async function RootLayout({
     }
 
     const handleActionsStudent: IHandleActionStudent = {
-        handleActionGetAll: async () => {
+        handleActionGetAll: async (showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number) => {
             "use server";
-            return getAllStudents(token);
+            return getAllStudents(token, showRels, excludeStudentsWithinClass, onlyStudentWithClassId);
         }
     }
 

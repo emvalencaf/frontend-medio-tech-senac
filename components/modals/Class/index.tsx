@@ -19,7 +19,7 @@ import TeachingAssignmentForm from './components/TeachingAssignmentForm';
 import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } from '../../../actions/coordinators/schemas';
 import { IResponseAddStudentForm, ITeachingAssignmentEntity } from '../../../actions/coordinators/types';
 import { IStudentEntity } from '../../../actions/students/types';
-import AddStudentForm from './components/AddStudentForm';
+import AddRemoveStudentForm from './components/AddRemoveStudentForm';
 
 export interface IClassModal {
     handleActions: IHandleActionClass;
@@ -29,8 +29,8 @@ export interface IClassModal {
     handleActionCreateTeachingAssignment: (classId: number, data: TeachingAssignmentFormData) => Promise<ITeachingAssignmentEntity | null>;
     handleActionPartialUpdateTeachingAssignment: (teachingAssignmentId: number, data: TeachingAssignmentFormDataPartialUpdate) => Promise<ITeachingAssignmentEntity | null>;
     handleActionGetTeachingAssignmentById: (teachingAssignmentId: number) => Promise<ITeachingAssignmentEntity | null>;
-    handleActionGetAllStudents: (showRels?: boolean) => Promise<IStudentEntity[] | null>;
-    handleActionAddStudentToClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;
+    handleActionGetAllStudents: (showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number) => Promise<IStudentEntity[] | null>;
+    handleActionAddStudentToClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;handleActionRemoveStudentFromClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;
 }
 
 const ClassModal: React.FC<IClassModal> = ({
@@ -43,6 +43,7 @@ const ClassModal: React.FC<IClassModal> = ({
     handleActionGetAllTeachers,
     handleActionGetAllStudents,
     handleActionsGetAllSubjects,
+    handleActionRemoveStudentFromClass
 }) => {
     const { isOpen, onClose, typeClassModal, actionPanelStatus, classId } = useClassModal();
     const { handleActionCreate, handleActionPartialUpdate, handleActionGetById, handleActionDeleteById } = handleActions;
@@ -106,10 +107,11 @@ const ClassModal: React.FC<IClassModal> = ({
             {/* FORM TO ADD STUDENT */}
 
             {
-                (typeClassModal === 'ACTION_CLASS' && actionPanelStatus === 'ADD_STUDENT') && (
-                    <AddStudentForm
+                (typeClassModal === 'ACTION_CLASS' && (actionPanelStatus === 'ADD_STUDENT' || actionPanelStatus === "REMOVE_STUDENT")) && (
+                    <AddRemoveStudentForm
                         handleActionAddStudentToClass={handleActionAddStudentToClass}
                         handleActionGetAllStudents={handleActionGetAllStudents}
+                        handleActionRemoveStudentFromClass={handleActionRemoveStudentFromClass}
                     />
                 )
             }

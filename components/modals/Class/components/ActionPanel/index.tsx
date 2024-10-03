@@ -30,7 +30,11 @@ const ActionPanel: React.FC<IActionPanel> = ({ handleActionDeleteById }) => {
                 Icon={PiStudent}
                 handleClick={() => onChangePanelStatus('ADD_STUDENT')}
             />
-
+            <ActionButton
+                label="Remover Aluno"
+                Icon={PiStudent}
+                handleClick={() => onChangePanelStatus('REMOVE_STUDENT')}
+            />
             <ActionButton
                 label="Associar Disciplina"
                 Icon={FaChalkboardTeacher}

@@ -2,10 +2,10 @@ import { create, } from "zustand";
 
 interface IUseClassModalStore {
     isOpen: boolean;
-    actionPanelStatus: 'EDIT' | 'PANEL' | 'ASSOCIATE_CLASS' | 'ADD_STUDENT';
+    actionPanelStatus: 'EDIT' | 'PANEL' | 'ASSOCIATE_CLASS' | 'ADD_STUDENT' | "REMOVE_STUDENT";
     classId?: number;
     teachingAssignmentId?: number;
-    onChangePanelStatus: (panelStatus: 'EDIT' | 'PANEL' | 'ASSOCIATE_CLASS' | 'ADD_STUDENT', teachingAssignmentId?: number) => void;
+    onChangePanelStatus: (panelStatus: 'EDIT' | 'PANEL' | 'ASSOCIATE_CLASS' | 'ADD_STUDENT' | "REMOVE_STUDENT", teachingAssignmentId?: number) => void;
     onOpen: (typeClassModal: 'VIEW_CLASS_SUBJECTS' | 'ACTION_CLASS' | 'CREATE_CLASS', classId?: number) => void;
     onClose: () => void;
     typeClassModal?: 'VIEW_CLASS_SUBJECTS' | 'ACTION_CLASS' | 'CREATE_CLASS';

@@ -52,6 +52,7 @@ const ModalProvider: React.FC<IModalProvider> = ({
                 handleActionGetTeachingAssignmentById={handleActionsCoordinator.handleActionGetTeachingAssignmentById}
                 handleActionGetAllStudents={handleActionsStudent.handleActionGetAll}
                 handleActionAddStudentToClass={handleActionsCoordinator.handleActionAddStudentToClass}
+                handleActionRemoveStudentFromClass={handleActionsCoordinator.handleActionRemoveStudentFromClass}
             />
         </>
     );
