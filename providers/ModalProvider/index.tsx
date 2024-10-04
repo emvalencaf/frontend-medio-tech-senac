@@ -13,6 +13,8 @@ import { IHandleActionCoordinator } from "../../types/coordinator";
 import { IHandleActionTeacher } from "../../types/teachers";
 import { IHandleActionSubject } from "../../types/subject";
 import { IHandleActionStudent } from "../../types/students";
+import { IHandleActionUsers } from "../../types/user";
+import UserModal from "../../components/modals/User";
 
 // interfaces
 export interface IModalProvider {
@@ -22,6 +24,7 @@ export interface IModalProvider {
     handleActionsTeacher: IHandleActionTeacher;
     handleActionsSubject: IHandleActionSubject;
     handleActionsStudent: IHandleActionStudent;
+    handleActionUser: IHandleActionUsers;
 }
 
 const ModalProvider: React.FC<IModalProvider> = ({
@@ -31,6 +34,7 @@ const ModalProvider: React.FC<IModalProvider> = ({
     handleActionsSubject,
     handleActionsTeacher,
     handleActionsStudent,
+    handleActionUser,
 }) => {
 
     const [isMounted, setIsMounted] = useState(false);
@@ -53,6 +57,12 @@ const ModalProvider: React.FC<IModalProvider> = ({
                 handleActionGetAllStudents={handleActionsStudent.handleActionGetAll}
                 handleActionAddStudentToClass={handleActionsCoordinator.handleActionAddStudentToClass}
                 handleActionRemoveStudentFromClass={handleActionsCoordinator.handleActionRemoveStudentFromClass}
+            />
+            <UserModal
+                handleActionDeleteUserById={handleActionUser.handleActionDeleteById}
+                handleActionCreateUser={handleActionUser.handleActionCreateUser}
+                handleActionUpdateUserById={handleActionUser.handleActionUpdateUserById}
+                handleActionGetUserById={handleActionUser.handleActionGetUserById}
             />
         </>
     );

@@ -26,6 +26,11 @@ import { IHandleActionSubject } from "../types/subject";
 import { getAllSubjects } from "../actions/subjects";
 import { IHandleActionStudent } from "../types/students";
 import { getAllStudents } from "../actions/students";
+import { IHandleActionUsers } from "../types/user";
+import { deleteUserById, getUserById, updateUserById } from "../actions/users";
+import { UserFormData } from "../actions/auth/schemas";
+import { handleSignUp } from "../actions/auth";
+import { UpdateUserFormData } from "../actions/users/schemas";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -138,6 +143,25 @@ export default async function RootLayout({
         }
     }
 
+    const handleActionUser: IHandleActionUsers ={
+        handleActionDeleteById: async (userId: number) => {
+            "use server";
+            return deleteUserById(userId, token);
+        },
+        handleActionCreateUser: async (userData: UserFormData) => {
+            "use server";
+            return handleSignUp(userData, token);
+        },
+        handleActionUpdateUserById: async (userId: number, userData: UpdateUserFormData) => {
+            "use server";
+            return updateUserById(userId, userData, token);
+        },
+        handleActionGetUserById: async (userId: number) => {
+            "use server";
+            return getUserById(userId, token);
+        }
+    }
+
     return (
         <html lang="en">
             <body
@@ -152,6 +176,7 @@ export default async function RootLayout({
                         handleActionsSubject={handleActionsSubject}
                         handleActionsTeacher={handleActionsTeacher}
                         handleActionsStudent={handleActionsStudent}
+                        handleActionUser={handleActionUser}
                     />
                     <ToasterProvider />
                     {session && <Sidebar />}

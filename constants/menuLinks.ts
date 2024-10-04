@@ -9,7 +9,7 @@ export const menuLinks: IMenuLink[] = [
         label: "Dashboard",
     },
     {
-        href: "/estudantes",
+        href: "/usuarios",
         Icon: FaUsers,
         label: "Estudantes"
     },

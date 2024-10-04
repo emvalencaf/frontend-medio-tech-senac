@@ -37,8 +37,8 @@ const TeachingAssignment: React.FC<ITeachingAssignmentComponent> = ({ teachingAs
     return (
         <li className="flex justify-between items-center py-3 px-4 border-b border-gray-200 hover:bg-gray-100">
             <div className="w-1/4">{teachingAssignment.id}</div>
-            <div className="w-1/4">{teachingAssignment.teacher.name}</div>
             <div className="w-1/4">{teachingAssignment.subject.name}</div>
+            <div className="w-1/4">{teachingAssignment.teacher.name}</div>
             <div className="flex gap-1.5">
                 <ActionButton
                     label="Editar"

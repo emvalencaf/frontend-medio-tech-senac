@@ -5,6 +5,8 @@ import { GiTeacher } from "react-icons/gi";
 import useClassModal from "../../hooks/useClassModal";
 import { format } from "date-fns";
 import { ptBR } from 'date-fns/locale';
+import { useSession } from "next-auth/react";
+import { extractUserTypeFromBackEndToken } from "../../utils";
 
 export interface IClassItem {
     id: number;
@@ -16,12 +18,18 @@ export interface IClassItem {
 }
 
 const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year, createdAt, updatedAt }) => {
+    const session = useSession();
+
+    const backendToken = session.data?.backendToken;
+
+    const userType = extractUserTypeFromBackEndToken(String(backendToken));
+
     const { onOpen } = useClassModal();
 
     const handleClickButton = (typeClassModal: "VIEW_CLASS_SUBJECTS" | "ACTION_CLASS" | "CREATE_CLASS") => {
         if (typeClassModal !== "CREATE_CLASS")
             return onOpen(typeClassModal, id);
-            
+
         onOpen(typeClassModal);
     }
 
@@ -32,19 +40,19 @@ const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year, createdAt, 
             <div className="w-1/4">{semester}</div>
             <div className="w-1/4">{year}</div>
             <div className="w-1/4">{format(createdAt, "d 'de' MMMM 'de' yyyy, HH:mm", { locale: ptBR })}</div>
-            <div className="w-1/4">{updatedAt instanceof Date ? format(updatedAt, "d 'de' MMMM 'de' yyyy, HH:mm", { locale: ptBR }): 'Não foi atualizada'}</div>
+            <div className="w-1/4">{updatedAt instanceof Date ? format(updatedAt, "d 'de' MMMM 'de' yyyy, HH:mm", { locale: ptBR }) : 'Não foi atualizada'}</div>
             <button className="w-1/4" onClick={() => handleClickButton('VIEW_CLASS_SUBJECTS')}>
                 <GiTeacher />
             </button>
             {
-                
-            }
-            <button className="w-1/4" onClick={() => {
-                handleClickButton('ACTION_CLASS')
+                userType === "COORDINATOR" &&
+                <button className="w-1/4" onClick={() => {
+                    handleClickButton('ACTION_CLASS')
 
-            }}>
-                <BsThreeDots />
-            </button>
+                }}>
+                    <BsThreeDots />
+                </button>
+            }
         </li>
     );
 };

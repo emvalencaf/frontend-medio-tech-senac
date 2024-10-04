@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CredentialSignInParams, PayloadSignIn, SignUpParams } from "./schemas";
+import { CredentialSignInParams, PayloadSignIn, UserFormData } from "./schemas";
 import { ErrorCustom } from "../types";
 
 const BACKEND_URL = process.env.BACKEND_URL;
@@ -33,9 +33,18 @@ export const handleSignIn = async (credentials: CredentialSignInParams) => {
     }
 };
 
-export const handleSignUp = async (signUp: SignUpParams) => {
+export const handleSignUp = async (signUp: UserFormData, token: string) => {
     try {
-        const res = await axios.post(`${BACKEND_URL}/auth/sign-up`, signUp);
+        const { firstName, lastName, userType, password, email } = signUp;
+
+        const res = await axios.post(`${BACKEND_URL}/auth/sign-up`, {
+            firstName, lastName, userType, password, email,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
 
         const data = res.data;
 

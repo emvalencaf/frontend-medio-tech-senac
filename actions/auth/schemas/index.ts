@@ -13,14 +13,6 @@ export interface PayloadSignIn {
     accessToken: string;
 }
 
-export interface SignUpParams {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-}
-
-
 export const signInSchema = object({
     email: string({ required_error: "Email is required" })
         .min(1, "Email is required")
@@ -40,13 +32,10 @@ export const signUpSchema = z
             .string()
             .min(2, 'Last name must be at least 2 characters long')
             .max(50, 'Last name cannot exceed 50 characters'),
-        sex: z.enum(['male', 'female'], {
-            errorMap: () => ({ message: 'Sex must be either male or female' }),
-        }),
-        birthday: z.string().refine((value) => !isNaN(Date.parse(value)), {
-            message: 'Invalid date format',
-        }),
         email: z.string().email('Invalid email format'),
+        userType: z.enum(['TEACHER', 'COORDINATOR', 'STUDENT'], {
+            errorMap: () => ({ message: 'User type must be TEACHER, COORDINATOR or STUDENT' })
+        }),
         password: z
             .string()
             .min(8, 'Password must be at least 8 characters long')
@@ -57,3 +46,5 @@ export const signUpSchema = z
         message: 'Passwords do not match',
         path: ['confirmedPassword'], // Define que o erro será associado ao campo confirmedPassword
     });
+
+export type UserFormData = z.infer<typeof signUpSchema>;

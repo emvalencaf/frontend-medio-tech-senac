@@ -122,6 +122,11 @@ const ClassModal: React.FC<IClassModal> = ({
                     <CurriculumGrid handleActionGetById={handleActionGetById} handleActionDeleteTeachingAssignmentById={handleActionDeleteTeachingAssignmentById} />
                 )
             }
+
+            {/* TO VIEW CLASS STUDENTS */}
+            {
+                
+            }
         </Modal>
     );
 };
