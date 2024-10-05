@@ -15,6 +15,7 @@ import { IHandleActionSubject } from "../../types/subject";
 import { IHandleActionStudent } from "../../types/students";
 import { IHandleActionUsers } from "../../types/user";
 import UserModal from "../../components/modals/User";
+import { IHandleActionGrades } from "../../types/grade";
 
 // interfaces
 export interface IModalProvider {
@@ -25,6 +26,7 @@ export interface IModalProvider {
     handleActionsSubject: IHandleActionSubject;
     handleActionsStudent: IHandleActionStudent;
     handleActionUser: IHandleActionUsers;
+    handleActionGrade: IHandleActionGrades;
 }
 
 const ModalProvider: React.FC<IModalProvider> = ({
@@ -35,6 +37,7 @@ const ModalProvider: React.FC<IModalProvider> = ({
     handleActionsTeacher,
     handleActionsStudent,
     handleActionUser,
+    handleActionGrade,
 }) => {
 
     const [isMounted, setIsMounted] = useState(false);
@@ -57,6 +60,10 @@ const ModalProvider: React.FC<IModalProvider> = ({
                 handleActionGetAllStudents={handleActionsStudent.handleActionGetAll}
                 handleActionAddStudentToClass={handleActionsCoordinator.handleActionAddStudentToClass}
                 handleActionRemoveStudentFromClass={handleActionsCoordinator.handleActionRemoveStudentFromClass}
+                handleActionGetAllGradeByTeachingIdAndStudentId={handleActionGrade.handleActionGetAllGradeByTeachingIdAndStudentId}
+                handleActionDeleteGrade={handleActionGrade.handleActionDeleteGrade}
+                handleActionCreateGrade={handleActionGrade.handleActionCreateGrade}
+                handleActionUpdateGrade={handleActionGrade.handleActionUpdateGrade}
             />
             <UserModal
                 handleActionDeleteUserById={handleActionUser.handleActionDeleteById}

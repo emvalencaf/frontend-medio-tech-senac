@@ -3,19 +3,18 @@
 import React from 'react';
 
 // custom components
-import ClassItem from '../ClassItem';
+import ClassItem, { IClassItem } from '../ClassItem';
 import { useSession } from 'next-auth/react';
 import { extractUserTypeFromBackEndToken } from '../../utils';
-import { IClassEntity } from '../../actions/classes/types';
 
 export interface IClassContainer {
-    classes: IClassEntity[];
+    classes: IClassItem[];
 }
 
 
 const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
     const session = useSession();
-
+    
     const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));
 
     return (
@@ -26,9 +25,7 @@ const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
                 <div className="w-1/4">Nome</div>
                 <div className="w-1/4">Ano</div>
                 <div className="w-1/4">Semestre</div>
-                {(userType === "TEACHER" || userType === "STUDENT") && (
-                    <div className="w-1/4">Horário</div>
-                )}
+                <div className="w-1/4">Horário</div>
                 {userType === "COORDINATOR" && <div className="w-1/4">Ações</div>}
             </div>
 

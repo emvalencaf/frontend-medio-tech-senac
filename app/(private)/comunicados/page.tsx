@@ -15,7 +15,7 @@ export default async function AnnouncementPage({ searchParams }: IAnnouncementPa
     const session = await auth();
 
     if (!session)
-        return redirect('/');
+        return redirect('/login');
 
     const queryparams: IGetAnnouncementsQueryParams = {
         title: searchParams?.title ? String(searchParams.title) : undefined,

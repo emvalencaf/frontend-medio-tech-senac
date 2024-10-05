@@ -13,7 +13,7 @@ export default async function ClassesPage({ searchParams }: IClassesPage) {
     const session = await auth();
 
     if (!session)
-        return redirect('/');
+        return redirect('/login');
 
     const queryparams = {
         page: searchParams?.page ? Number(searchParams.page) : 1,

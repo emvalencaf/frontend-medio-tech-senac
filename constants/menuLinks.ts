@@ -4,7 +4,7 @@ import { SiGoogleclassroom } from "react-icons/si";
 
 export const menuLinks: IMenuLink[] = [
     {
-        href: "/dashboard",
+        href: "/",
         Icon: FaHome,
         label: "Dashboard",
     },
@@ -14,19 +14,9 @@ export const menuLinks: IMenuLink[] = [
         label: "Estudantes"
     },
     {
-        href: "/professores",
-        Icon: FaChalkboardTeacher,
-        label: "Professores"
-    },
-    {
         href: "/turmas",
         Icon: SiGoogleclassroom,
         label: "Turmas"
-    }
-    , {
-        href: "/calendario",
-        Icon: FaCalendarAlt,
-        label: "Calendário"
     },
     {
         href: "/financeiro",

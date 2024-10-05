@@ -3,6 +3,8 @@
 import { BsThreeDots } from "react-icons/bs";
 import { GiTeacher } from "react-icons/gi";
 import useClassModal from "../../hooks/useClassModal";
+import { format } from "date-fns";
+import { ptBR } from 'date-fns/locale';
 import { useSession } from "next-auth/react";
 import { extractUserTypeFromBackEndToken } from "../../utils";
 
@@ -15,7 +17,7 @@ export interface IClassItem {
     updatedAt?: Date;
 }
 
-const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year }) => {
+const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year, createdAt, updatedAt }) => {
     const session = useSession();
 
     const backendToken = session.data?.backendToken;
@@ -37,13 +39,9 @@ const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year }) => {
             <div className="w-1/4">{name}</div>
             <div className="w-1/4">{year}</div>
             <div className="w-1/4">{semester}</div>
-            {
-                (userType === "TEACHER" || userType === 'STUDENT') && (
-                    <button className="w-1/4" onClick={() => handleClickButton('VIEW_CLASS_SUBJECTS')}>
-                        <GiTeacher />
-                    </button>
-                )
-            }
+            <button className="w-1/4" onClick={() => handleClickButton('VIEW_CLASS_SUBJECTS')}>
+                <GiTeacher />
+            </button>
             {
                 userType === "COORDINATOR" &&
                 <button className="w-1/4" onClick={() => {

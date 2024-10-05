@@ -20,6 +20,12 @@ import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } f
 import { IResponseAddStudentForm, ITeachingAssignmentEntity } from '../../../actions/coordinators/types';
 import { IStudentEntity } from '../../../actions/students/types';
 import AddRemoveStudentForm from './components/AddRemoveStudentForm';
+import { IGradeEntity } from '../../../actions/grades/types';
+import GradesGrid from './components/GradeGrid';
+import { IGradeDataForm, IUpdateGradeDataForm } from '../../../actions/grades/schemas';
+import AddUpdateGradetForm from './components/AddGradeForm';
+import AddGradeForm from './components/AddGradeForm';
+import UpdateGradeForm from './components/UpdateGradeForm';
 
 export interface IClassModal {
     handleActions: IHandleActionClass;
@@ -31,6 +37,10 @@ export interface IClassModal {
     handleActionGetTeachingAssignmentById: (teachingAssignmentId: number) => Promise<ITeachingAssignmentEntity | null>;
     handleActionGetAllStudents: (showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number) => Promise<IStudentEntity[] | null>;
     handleActionAddStudentToClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;handleActionRemoveStudentFromClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;
+    handleActionGetAllGradeByTeachingIdAndStudentId:  (teachingAssignmentId: number, studentId: number) => Promise<IGradeEntity[]>;
+    handleActionDeleteGrade: (gradeId: number) => Promise<void>;
+    handleActionCreateGrade: (teachingAssignmentId: number, gradeDTO: IGradeDataForm) => Promise<IGradeEntity>;
+    handleActionUpdateGrade: (teachingAssignmentId: number, gradeDTO: IUpdateGradeDataForm) => Promise<IGradeEntity>;
 }
 
 const ClassModal: React.FC<IClassModal> = ({
@@ -43,7 +53,11 @@ const ClassModal: React.FC<IClassModal> = ({
     handleActionGetAllTeachers,
     handleActionGetAllStudents,
     handleActionsGetAllSubjects,
-    handleActionRemoveStudentFromClass
+    handleActionRemoveStudentFromClass,
+    handleActionGetAllGradeByTeachingIdAndStudentId,
+    handleActionDeleteGrade,
+    handleActionCreateGrade,
+    handleActionUpdateGrade,
 }) => {
     const { isOpen, onClose, typeClassModal, actionPanelStatus, classId } = useClassModal();
     const { handleActionCreate, handleActionPartialUpdate, handleActionGetById, handleActionDeleteById } = handleActions;
@@ -118,14 +132,45 @@ const ClassModal: React.FC<IClassModal> = ({
             
             {/* TO VIEW CLASS SUBJECTS */}
             {
-                (typeClassModal === "VIEW_CLASS_SUBJECTS") && (
-                    <CurriculumGrid handleActionGetById={handleActionGetById} handleActionDeleteTeachingAssignmentById={handleActionDeleteTeachingAssignmentById} />
+                ((typeClassModal === "VIEW_CLASS_SUBJECTS") && (
+                    actionPanelStatus !== 'SEE_GRADE' &&
+                    actionPanelStatus !== 'EDIT_GRADE' &&
+                    actionPanelStatus !== 'CREATE_GRADE'
+                )) && (
+                    <CurriculumGrid
+                        handleActionGetById={handleActionGetById}
+                        handleActionDeleteTeachingAssignmentById={handleActionDeleteTeachingAssignmentById}
+                    />
                 )
             }
 
-            {/* TO VIEW CLASS STUDENTS */}
+            {/*  TO SEE GRADE FROM CLASS */}
             {
-                
+                (actionPanelStatus === 'SEE_GRADE') && (
+                    <GradesGrid
+                        handleActionGetAllGradeByTeachingIdAndStudentId={handleActionGetAllGradeByTeachingIdAndStudentId}
+                        handleActionDeleteGrade={handleActionDeleteGrade}
+                    />
+                )
+            }
+
+            {/* TO CREATE GRADE */}
+            {
+                actionPanelStatus === 'CREATE_GRADE' && (
+                    <AddGradeForm
+                        handleActionCreateGrade={handleActionCreateGrade}
+                        handleActionGetAllStudents={handleActionGetAllStudents}                    />
+                )
+            }
+
+            {
+                actionPanelStatus === 'EDIT_GRADE' && (
+                    <UpdateGradeForm
+                        handleActionUpdateGrade={handleActionUpdateGrade}
+                        handleActionGetAllStudents={handleActionGetAllStudents}
+                        handleActionGetAllGradeByTeachingIdAndStudentId={handleActionGetAllGradeByTeachingIdAndStudentId}
+                    />
+                )
             }
         </Modal>
     );

@@ -3,7 +3,7 @@ import { IStudentEntity } from "./types";
 
 const BACKEND_URL = `${process.env.BACKEND_URL}/students`
 
-export const getAllStudents = async (token: string, showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number): Promise<IStudentEntity[] | null> => {
+export const getAllStudents = async (token: string, showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number, onlyStudentWithTeachingAssignmentId?: number): Promise<IStudentEntity[] | null> => {
     try {
         const url = new URL(BACKEND_URL);
 
@@ -13,6 +13,8 @@ export const getAllStudents = async (token: string, showRels?: boolean, excludeS
         excludeStudentsWithinClass && url.searchParams.set('excludeStudentsWithinClass', String(excludeStudentsWithinClass));
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onlyStudentWithClassId && url.searchParams.set('onlyStudentWithClassId', String(onlyStudentWithClassId));
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        onlyStudentWithTeachingAssignmentId && url.searchParams.set('onlyStudentWithTeachingAssignmentId', String(onlyStudentWithTeachingAssignmentId));
 
         const res = await axios.get(url.toString(), {
             'headers': {

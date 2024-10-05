@@ -2,14 +2,20 @@ import { useEffect, useState } from "react";
 import useClassModal from "../../../../../hooks/useClassModal";
 import { IClassEntity } from "../../../../../actions/classes/types";
 import TeachingAssignment, { ITeachingAssignment } from "./TeachingAssignment";
+import { useSession } from "next-auth/react";
+import { extractUserTypeFromBackEndToken } from "../../../../../utils";
+
 
 export interface ICurriculumGrid {
     handleActionGetById: (classId: number, showRels?: boolean) => Promise<IClassEntity | null>;
     handleActionDeleteTeachingAssignmentById: (teachingAssignmentId: number) => Promise<void>;
-
 }
 
-const CurriculumGrid: React.FC<ICurriculumGrid> = ({ handleActionGetById, handleActionDeleteTeachingAssignmentById }) => {
+const CurriculumGrid: React.FC<ICurriculumGrid> = ({ handleActionGetById, handleActionDeleteTeachingAssignmentById, }) => {
+    const session = useSession();
+    
+    const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));
+
     const [teachingAssignments, setTeachingAssignments] = useState<ITeachingAssignment[]>();
     const { classId } = useClassModal();
 
@@ -45,10 +51,18 @@ const CurriculumGrid: React.FC<ICurriculumGrid> = ({ handleActionGetById, handle
     return (
         <div className="w-full h-full p-4">
             {/* Cabeçalho simulando as colunas da tabela */}
-            <div className="flex bg-purple-600 text-white font-semibold py-2 px-4 rounded-t-md">
-                <div className="w-1/4">ID</div>
+            <div className="flex justify-between bg-purple-600 text-white font-semibold py-2 px-4 rounded-t-md">
+                {
+                    userType === 'COORDINATOR' && (
+                        <div className="w-1/4">ID</div>
+                    )
+                }
                 <div className="w-1/4">Disciplina</div>
-                <div className="w-1/4">Professor</div>
+                {
+                    userType !== "TEACHER" && (
+                        <div className="w-1/4">Professor</div>
+                    )
+                }
                 <div className="w-1/4">Ação</div>
             </div>
 

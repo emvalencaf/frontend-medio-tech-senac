@@ -31,6 +31,9 @@ import { deleteUserById, getUserById, updateUserById } from "../actions/users";
 import { UserFormData } from "../actions/auth/schemas";
 import { handleSignUp } from "../actions/auth";
 import { UpdateUserFormData } from "../actions/users/schemas";
+import { IHandleActionGrades } from "../types/grade";
+import { IGradeDataForm, IUpdateGradeDataForm } from "../actions/grades/schemas";
+import { createGrade, deleteGradeById, getAllGradeByTeachingIdAndStudentId, getGradeById, partialUpdateGrade } from "../actions/grades";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -130,9 +133,9 @@ export default async function RootLayout({
     }
 
     const handleActionsStudent: IHandleActionStudent = {
-        handleActionGetAll: async (showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number) => {
+        handleActionGetAll: async (showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number, onlyStudentWithTeachingAssignmentId?: number) => {
             "use server";
-            return getAllStudents(token, showRels, excludeStudentsWithinClass, onlyStudentWithClassId);
+            return getAllStudents(token, showRels, excludeStudentsWithinClass, onlyStudentWithClassId, onlyStudentWithTeachingAssignmentId);
         }
     }
 
@@ -140,6 +143,29 @@ export default async function RootLayout({
         handleActionGetAll: async (classId?: number) => {
             "use server";
             return getAllSubjects(token, classId);
+        }
+    }
+
+    const handleActionGrade: IHandleActionGrades = {
+        handleActionCreateGrade: async (teachingAssignmentId: number, gradeDTO: IGradeDataForm) => {
+            "use server";
+            return createGrade(teachingAssignmentId, token, gradeDTO);
+        },
+        handleActionGetAllGradeByTeachingIdAndStudentId: async (teachingAssignmentId: number, studentId: number) => {
+            "use server";
+            return getAllGradeByTeachingIdAndStudentId(teachingAssignmentId, studentId, token);
+        },
+        handleActionUpdateGrade: async (teachingAssignmentId: number, gradeDTO: IUpdateGradeDataForm) => {
+            "use server";
+            return partialUpdateGrade(teachingAssignmentId, token, gradeDTO);
+        },
+        handleActionDeleteGrade: async (gradeId: number) => {
+            "use server";
+            return deleteGradeById(gradeId, token);
+        },
+        handleActionGetGradeById: async (gradeId: number) =>{
+            "use server";
+            return getGradeById(gradeId, token);
         }
     }
 
@@ -159,7 +185,7 @@ export default async function RootLayout({
         handleActionGetUserById: async (userId: number) => {
             "use server";
             return getUserById(userId, token);
-        }
+        },
     }
 
     return (
@@ -177,6 +203,7 @@ export default async function RootLayout({
                         handleActionsTeacher={handleActionsTeacher}
                         handleActionsStudent={handleActionsStudent}
                         handleActionUser={handleActionUser}
+                        handleActionGrade={handleActionGrade}
                     />
                     <ToasterProvider />
                     {session && <Sidebar />}

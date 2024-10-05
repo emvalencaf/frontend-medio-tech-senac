@@ -14,7 +14,7 @@ export default async function UsersPage({ searchParams }: IUsersPage) {
     const session = await auth();
 
     if (!session)
-        return redirect('/');
+        return redirect('/login');
 
     const queryparams = {
         page: searchParams?.page ? Number(searchParams.page) : 1,

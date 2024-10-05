@@ -1,30 +1,30 @@
 import { AiOutlineSend } from "react-icons/ai";
 import useClassModal from "../../../../../hooks/useClassModal";
 import { useForm } from "react-hook-form";
-import { AddStudentFormData, addStudentSchema } from "../../../../../actions/coordinators/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import Select from 'react-select';
 import { IStudentEntity } from "../../../../../actions/students/types";
-import { IResponseAddStudentForm } from "../../../../../actions/coordinators/types";
+import { createGradeSchema, IGradeDataForm } from "../../../../../actions/grades/schemas";
+import { IGradeEntity } from "../../../../../actions/grades/types";
+import { MdGrade } from "react-icons/md";
 
 export interface IOptions {
     value: number;
     label: string;
 }
 
-export interface IAddStudentForm {
+export interface IAddGradeForm {
     handleActionGetAllStudents: (showRels?: boolean, excludeStudentsWithinClass?: boolean, onlyStudentWithClassId?: number, onlyStudentWithTeachingAssignmentId?: number) => Promise<IStudentEntity[] | null>;
-    handleActionAddStudentToClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;handleActionRemoveStudentFromClass: (studentId: number, classId: number) => Promise<IResponseAddStudentForm | null>;
+    handleActionCreateGrade: (assignmentId: number, gradeDTO: IGradeDataForm) => Promise<IGradeEntity>;
 }
 
-const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
-    handleActionAddStudentToClass,
+const AddGradeForm: React.FC<IAddGradeForm> = ({
     handleActionGetAllStudents,
-    handleActionRemoveStudentFromClass,
+    handleActionCreateGrade,
 }) => {
-    const { onClose, classId, actionPanelStatus } = useClassModal();
+    const { onClose, teachingAssignmentId, actionPanelStatus } = useClassModal();
 
     const [studentOptions, setStudentOptions] = useState<IOptions[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -33,8 +33,8 @@ const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
     const [errorStudentOptions, setErrorStudentOptions] = useState<string | null>(null);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<AddStudentFormData>({
-        resolver: zodResolver(addStudentSchema),
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm<IGradeDataForm>({
+        resolver: zodResolver(createGradeSchema),
         defaultValues: {},
     });
 
@@ -45,9 +45,7 @@ const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
             setLoadingStudentOptions(true);
 
             try {
-                const data = actionPanelStatus === 'ADD_STUDENT' ?
-                    await handleActionGetAllStudents()
-                    : await handleActionGetAllStudents(undefined, undefined, classId);
+                const data = await handleActionGetAllStudents(undefined, undefined, undefined, teachingAssignmentId);
 
                 if (!data)
                     return setStudentOptions([]);
@@ -58,7 +56,7 @@ const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
                 }));
 
                 setStudentOptions(options);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
                 console.log(err);
                 setErrorStudentOptions('Failed to fetch students');
@@ -68,21 +66,18 @@ const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
         };
 
         fetchStudents();
-    }, [classId]);
+    }, [actionPanelStatus, teachingAssignmentId, handleActionGetAllStudents]);
 
-    const onSubmit = async (data: AddStudentFormData) => {
+    const onSubmit = async (data: IGradeDataForm) => {
         try {
-            if (!classId)
+            if (!teachingAssignmentId)
                 return toast.error('Turma não foi encontrada, tente de novo');
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            actionPanelStatus === "ADD_STUDENT" ?
-                await handleActionAddStudentToClass(data.studentId, classId)
-                : await handleActionRemoveStudentFromClass(data.studentId, classId);
+            await handleActionCreateGrade(teachingAssignmentId, data);
 
             onClose();
 
-            toast.success(`A ${actionPanelStatus === "ADD_STUDENT" ? "adição" : "remoção"} do estudante a turma foi bem-sucedida!`);
+            toast.success(`${actionPanelStatus === 'CREATE_GRADE' ? 'O lançamento da nota' : 'A atualização da nota'} do aluno foi bem-sucedida!`);
 
             window.location.reload();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,7 +89,7 @@ const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
                     toast.error(msg);
                 });
             } else {
-                toast.error(`A ${actionPanelStatus === "ADD_STUDENT" ? "adição" : "remoção"} do aluno a turma falhou.`);
+                toast.error(`Não foi possível lançar a nota do estudante.`);
             }
         }
     };
@@ -116,20 +111,57 @@ const AddRemoveStudentForm: React.FC<IAddStudentForm> = ({
                 />
                 {errors.studentId && <span className="text-red-500 text-sm">{errors.studentId.message}</span>}
             </div>
+            <div>
+                <label htmlFor="avaliation" className="flex items-center text-sm font-medium text-gray-700">
+                    <MdGrade className="mr-2 text-gray-500" /> Avaliação
+                </label>
+                <input
+                    id="avaliation"
+                    type="number"
+                    max={3}
+                    min={1}
+                    {...register('avaliation')}
+                    className={`mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.avaliation ? 'border-red-500' : ''}`}
+                />
+                {errors.avaliation && <span className="text-red-500 text-sm">{errors.avaliation.message}</span>}
+            </div>
+            <div>
+                <label htmlFor="grade" className="flex items-center text-sm font-medium text-gray-700">
+                    <MdGrade className="mr-2 text-gray-500" />Nota (Menção)
+                </label>
+                <input
+                    id="grade"
+                    type="text"
+                    {...register('grade')}
+                    className={`mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.grade ? 'border-red-500' : ''}`}
+                />
+                {errors.grade && <span className="text-red-500 text-sm">{errors.grade.message}</span>}
+            </div>
+            <div>
+                <label htmlFor="score" className="flex items-center text-sm font-medium text-gray-700">
+                    <MdGrade className="mr-2 text-gray-500" />Nota Numérica
+                </label>
+                <input
+                    id="score"
+                    type="number"
+                    max={10}
+                    min={0}
+                    step={0.01}
+                    {...register('score')}
+                    className={`mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.score ? 'border-red-500' : ''}`}
+                />
+                {errors.score && <span className="text-red-500 text-sm">{errors.score.message}</span>}
+            </div>
             {/* Botão de Enviar */}
             <button
                 type="submit"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
                 <AiOutlineSend className="mr-2" />
-                {
-                    actionPanelStatus === "ADD_STUDENT" ?
-                        "Adicionar Aluno"
-                        : "Remover Aluno"
-                }
+                Lançar Nota
             </button>
         </form>
     );
 }
 
-export default AddRemoveStudentForm;
+export default AddGradeForm;
