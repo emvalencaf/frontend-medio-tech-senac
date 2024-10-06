@@ -3,16 +3,17 @@
 import React from 'react';
 
 // custom components
-import ClassItem, { IClassItem } from '../ClassItem';
+import SubjectItem from '../SubjectItem';
 import { useSession } from 'next-auth/react';
 import { extractUserTypeFromBackEndToken } from '../../utils';
+import { ISubjectEntity } from '../../actions/subjects/types';
 
-export interface IClassContainer {
-    classes: IClassItem[];
+export interface ISubjectContainer {
+    subjects: ISubjectEntity[];
 }
 
 
-const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
+const SubjectsContainer: React.FC<ISubjectContainer> = ({ subjects }) => {
     const session = useSession();
     
     const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));
@@ -23,16 +24,14 @@ const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
             <div className="flex bg-purple-600 text-white font-semibold py-2 px-4 rounded-t-md">
                 <div className="w-1/4">ID</div>
                 <div className="w-1/4">Nome</div>
-                <div className="w-1/4">Ano</div>
-                <div className="w-1/4">Semestre</div>
-                <div className="w-1/4">Horário</div>
+                <div className="w-1/4">Descrição</div>
                 {userType === "COORDINATOR" && <div className="w-1/4">Ações</div>}
             </div>
 
             {/* Lista de itens com aparência de tabela */}
             <ul className="w-full">
-                {classes.map((classItem) => (
-                    <ClassItem key={`classes-${classItem.id}`} {...classItem} />
+                {subjects.map((classItem) => (
+                    <SubjectItem key={`subjects-${classItem.id}`} {...classItem} />
                 ))}
             </ul>
         </div>
@@ -40,4 +39,4 @@ const ClassesContainer: React.FC<IClassContainer> = ({ classes }) => {
 };
 
 
-export default ClassesContainer;
+export default SubjectsContainer;

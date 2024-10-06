@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { ClassFormData } from '../../../actions/classes/schemas';
 import CurriculumGrid from './components/CurriculumGrid';
 import { ITeacherEntity } from '../../../actions/teachers/types';
-import { ISubjectEntity } from '../../../actions/subjects/types';
+import { IGetSubjectResponse } from '../../../actions/subjects/types';
 import TeachingAssignmentForm from './components/TeachingAssignmentForm';
 import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } from '../../../actions/coordinators/schemas';
 import { IResponseAddStudentForm, ITeachingAssignmentEntity } from '../../../actions/coordinators/types';
@@ -23,7 +23,6 @@ import AddRemoveStudentForm from './components/AddRemoveStudentForm';
 import { IGradeEntity } from '../../../actions/grades/types';
 import GradesGrid from './components/GradeGrid';
 import { IGradeDataForm, IUpdateGradeDataForm } from '../../../actions/grades/schemas';
-import AddUpdateGradetForm from './components/AddGradeForm';
 import AddGradeForm from './components/AddGradeForm';
 import UpdateGradeForm from './components/UpdateGradeForm';
 
@@ -31,7 +30,7 @@ export interface IClassModal {
     handleActions: IHandleActionClass;
     handleActionDeleteTeachingAssignmentById: (teachingAssignmentId: number) => Promise<void>;
     handleActionGetAllTeachers: (showRels?: boolean) =>Promise<ITeacherEntity[] | null>;
-    handleActionsGetAllSubjects: (classId?: number) => Promise<ISubjectEntity[] | null>;
+    handleActionsGetAllSubjects: (classId?: number) => Promise<IGetSubjectResponse | null>;
     handleActionCreateTeachingAssignment: (classId: number, data: TeachingAssignmentFormData) => Promise<ITeachingAssignmentEntity | null>;
     handleActionPartialUpdateTeachingAssignment: (teachingAssignmentId: number, data: TeachingAssignmentFormDataPartialUpdate) => Promise<ITeachingAssignmentEntity | null>;
     handleActionGetTeachingAssignmentById: (teachingAssignmentId: number) => Promise<ITeachingAssignmentEntity | null>;

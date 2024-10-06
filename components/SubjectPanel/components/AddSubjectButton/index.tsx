@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import { FaBook } from 'react-icons/fa';
 
-import { SiGoogleclassroom } from 'react-icons/si';
 
-interface AddClassButtonProps {
+interface AddSubjectButtonProps {
     onClick: () => void;
 }
 
-const AddClassButton: React.FC<AddClassButtonProps> = ({ onClick }) => {
+const AddSubjectButton: React.FC<AddSubjectButtonProps> = ({ onClick }) => {
     const [showLabel, setShowLabel] = useState(true);
 
     return (
@@ -16,12 +16,12 @@ const AddClassButton: React.FC<AddClassButtonProps> = ({ onClick }) => {
             onMouseEnter={() => setShowLabel(true)}
             onMouseLeave={() => setShowLabel(false)}
         >
-            <SiGoogleclassroom className="text-xl" />
+            <FaBook className="text-xl" />
             <span className={` ${showLabel ? 'opacity-100' : 'opacity-0 hidden md:inline-block'} transition-opacity duration-300 ease-in-out`}>
-                Adicionar Turma
+                Adicionar Disciplina
             </span>
         </button>
     );
 };
 
-export default AddClassButton;
+export default AddSubjectButton;

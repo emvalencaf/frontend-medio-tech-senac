@@ -1,51 +1,41 @@
 "use client";
 
 import { BsThreeDots } from "react-icons/bs";
-import { GiTeacher } from "react-icons/gi";
-import useClassModal from "../../hooks/useClassModal";
-import { format } from "date-fns";
-import { ptBR } from 'date-fns/locale';
 import { useSession } from "next-auth/react";
 import { extractUserTypeFromBackEndToken } from "../../utils";
+import useSubjectModal from "../../hooks/useSubjectModal";
 
-export interface IClassItem {
+export interface ISubjectItem {
     id: number;
     name: string;
-    semester: number;
-    year: number;
-    createdAt: Date;
-    updatedAt?: Date;
+    description: string;
 }
 
-const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year, createdAt, updatedAt }) => {
+const SubjectItem: React.FC<ISubjectItem> = ({ id, name, description }) => {
     const session = useSession();
 
     const backendToken = session.data?.backendToken;
 
     const userType = extractUserTypeFromBackEndToken(String(backendToken));
 
-    const { onOpen } = useClassModal();
+    const { onOpen } = useSubjectModal();
 
-    const handleClickButton = (typeClassModal: "VIEW_CLASS_SUBJECTS" | "ACTION_CLASS" | "CREATE_CLASS") => {
-        if (typeClassModal !== "CREATE_CLASS")
-            return onOpen(typeClassModal, id);
-
-        onOpen(typeClassModal);
+    const handleClickButton = (typeSubjectModal: "ACTION_SUBJECT" | "CREATE_SUBJECT") => {
+        if (typeSubjectModal !== "CREATE_SUBJECT")
+            return onOpen(typeSubjectModal, id);
+            
+        onOpen(typeSubjectModal);
     }
 
     return (
         <li className="flex justify-between items-center py-3 px-4 border-b border-gray-200 hover:bg-gray-100">
             <div className="w-1/4">{id}</div>
             <div className="w-1/4">{name}</div>
-            <div className="w-1/4">{year}</div>
-            <div className="w-1/4">{semester}</div>
-            <button className="w-1/4" onClick={() => handleClickButton('VIEW_CLASS_SUBJECTS')}>
-                <GiTeacher />
-            </button>
+            <div className="w-1/4">{description}</div>
             {
                 userType === "COORDINATOR" &&
                 <button className="w-1/4" onClick={() => {
-                    handleClickButton('ACTION_CLASS')
+                    handleClickButton('ACTION_SUBJECT')
 
                 }}>
                     <BsThreeDots />
@@ -57,4 +47,4 @@ const ClassItem: React.FC<IClassItem> = ({ id, name, semester, year, createdAt, 
 
 
 
-export default ClassItem;
+export default SubjectItem;

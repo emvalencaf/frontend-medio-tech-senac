@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import Select from 'react-select';
 import { IStudentEntity } from "../../../../../actions/students/types";
-import { createGradeSchema, IGradeDataForm, IUpdateGradeDataForm, updateGradeSchema } from "../../../../../actions/grades/schemas";
+import { IUpdateGradeDataForm, updateGradeSchema } from "../../../../../actions/grades/schemas";
 import { IGradeEntity } from "../../../../../actions/grades/types";
 import { MdGrade } from "react-icons/md";
 

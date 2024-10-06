@@ -16,6 +16,7 @@ import { IHandleActionStudent } from "../../types/students";
 import { IHandleActionUsers } from "../../types/user";
 import UserModal from "../../components/modals/User";
 import { IHandleActionGrades } from "../../types/grade";
+import SubjectModal from "../../components/modals/Subject";
 
 // interfaces
 export interface IModalProvider {
@@ -70,6 +71,12 @@ const ModalProvider: React.FC<IModalProvider> = ({
                 handleActionCreateUser={handleActionUser.handleActionCreateUser}
                 handleActionUpdateUserById={handleActionUser.handleActionUpdateUserById}
                 handleActionGetUserById={handleActionUser.handleActionGetUserById}
+            />
+            <SubjectModal
+                handleActionCreateSubject={handleActionsSubject.handleActionCreate}
+                handleActionDeleteSubjectById={handleActionsSubject.handleActionDeleteById}
+                handleActionUpdateSubjectById={handleActionsSubject.handleActionUpdate}
+                handleActionGetSubjectById={handleActionsSubject.handleActionGetById}
             />
         </>
     );

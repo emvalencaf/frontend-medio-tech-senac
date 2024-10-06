@@ -23,7 +23,7 @@ import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } f
 import { IHandleActionTeacher } from "../types/teachers";
 import { getAllTeachers } from "../actions/teachers";
 import { IHandleActionSubject } from "../types/subject";
-import { getAllSubjects } from "../actions/subjects";
+import { createSubject, deleteSubjectById, getAllSubjects, getSubjectById, updateSubject } from "../actions/subjects";
 import { IHandleActionStudent } from "../types/students";
 import { getAllStudents } from "../actions/students";
 import { IHandleActionUsers } from "../types/user";
@@ -34,6 +34,7 @@ import { UpdateUserFormData } from "../actions/users/schemas";
 import { IHandleActionGrades } from "../types/grade";
 import { IGradeDataForm, IUpdateGradeDataForm } from "../actions/grades/schemas";
 import { createGrade, deleteGradeById, getAllGradeByTeachingIdAndStudentId, getGradeById, partialUpdateGrade } from "../actions/grades";
+import { ISubjectFormData, IUpdateSubjectFormData } from "../actions/subjects/schemas";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -68,7 +69,6 @@ export default async function RootLayout({
         },
         handleActionGetClassesByTeacher: async () => {
             "use server";
-            console.log('é o que: ', session?.user);
             const teacherId = extractUserIdFromBackEndToken(token);
             return getAllByTeacher(Number(teacherId), token);
         },
@@ -142,7 +142,26 @@ export default async function RootLayout({
     const handleActionsSubject: IHandleActionSubject = {
         handleActionGetAll: async (classId?: number) => {
             "use server";
-            return getAllSubjects(token, classId);
+            return getAllSubjects(token, {
+                excludeByClassId: classId,
+                noPagination: true,
+            },);
+        },
+        handleActionCreate: async (data: ISubjectFormData) => {
+            "use server";
+            return createSubject(data, token);
+        },
+        handleActionDeleteById: async (subjectId) => {
+            "use server";
+            return deleteSubjectById(subjectId, token);
+        },
+        handleActionUpdate: async (subjectId: number, data: IUpdateSubjectFormData) => {
+            "use server";
+            return updateSubject(subjectId, data, token);
+        },
+        handleActionGetById: async (subjectId: number) => {
+            "use server";
+            return getSubjectById(subjectId, token);
         }
     }
 

@@ -6,7 +6,7 @@ import { ITeachingAssignmentEntity } from "../../../../../actions/coordinators/t
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { ITeacherEntity } from "../../../../../actions/teachers/types";
-import { ISubjectEntity } from "../../../../../actions/subjects/types";
+import { IGetSubjectResponse } from "../../../../../actions/subjects/types";
 import { useEffect, useState } from "react";
 import Select from 'react-select';
 
@@ -20,7 +20,7 @@ export interface ITeachingAssignmentForm {
     handleActionPartialUpdateTeachingAssignment: (assignmentTeachingId: number, data: TeachingAssignmentFormDataPartialUpdate) => Promise<ITeachingAssignmentEntity | null>;
     handleActionGetTeachingAssignmentById: (teachingAssignmentId: number) => Promise<ITeachingAssignmentEntity | null>;
     handleActionGetAllTeachers: (showRels?: boolean) => Promise<ITeacherEntity[] | null>;
-    handleActionsGetAllSubjects: () => Promise<ISubjectEntity[] | null>;
+    handleActionsGetAllSubjects: () => Promise<IGetSubjectResponse | null>;
     isCreate?: boolean;
     initialValues?: Partial<TeachingAssignmentFormData>;
     classId?: number;
@@ -36,7 +36,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
 }) => {
     const { onClose, teachingAssignmentId } = useClassModal();
     const [isCreate, setIsCreate] = useState<boolean>(true);
-    
+
     const [selectedTeacherOption, setSelectedTeacherOption] = useState<IOptions>();
     const [selectedSubjectOption, setSelectedSubjectOption] = useState<IOptions>();
 
@@ -66,7 +66,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
 
     useEffect(() => {
         setIsCreate(!teachingAssignmentId); // true se teachingAssignmentId for falsy (novo), false se for truthy (edição)
-        
+
         const fetchAssignmentTeaching = async (id: number) => {
             const res = await handleActionGetTeachingAssignmentById(id);
 
@@ -83,12 +83,12 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
                 label: res.teacher.firstName + ' ' + res.teacher.lastName,
             })
         }
-        
+
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         teachingAssignmentId && fetchAssignmentTeaching(teachingAssignmentId);
 
     }, [teachingAssignmentId]);
-    
+
 
     useEffect(() => {
         const fetchSubjectsAndTeachers = async (isTeacherOptions: boolean) => {
@@ -104,18 +104,33 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
                 : setErrorSubjectOptions(null);
 
             try {
-                const data = await (isTeacherOptions ? handleActionGetAllTeachers : handleActionsGetAllSubjects)();
+                if (isTeacherOptions) {
+                    const data = await handleActionGetAllTeachers();
 
-                if (!data)
-                    return isTeacherOptions ? setTeacherOptions([]) : setSubjectOptions([]);
+                    if (!data)
+                        return setTeacherOptions([]);
 
-                const options = data.map((dataItem) => ({
-                    value: dataItem.id,
-                    label: isTeacherOptions ? (dataItem as ITeacherEntity).firstName + ' ' + (dataItem as ITeacherEntity).lastName : (dataItem as ISubjectEntity).name,
-                }));
+                    const options = data.map((dataItem) => ({
+                        value: dataItem.id,
+                        label: dataItem.firstName + ' ' + dataItem.lastName,
+                    }));
 
-                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                isTeacherOptions ? setTeacherOptions(options) : setSubjectOptions(options);
+                    setTeacherOptions(options)
+                } else {
+                    const res = await handleActionsGetAllSubjects();
+
+                    const data = res?.data;
+
+                    if (!data)
+                        return setSubjectOptions([]);
+
+                    const options = data.map((dataItem) => ({
+                        value: dataItem.id,
+                        label: dataItem.name,
+                    }));
+
+                    setSubjectOptions(options);
+                }
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -133,7 +148,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
     const onSubmit = async (data: TeachingAssignmentFormData) => {
         try {
             console.log(data);
-            console.log('in onSubmit: ',isCreate);
+            console.log('in onSubmit: ', isCreate);
 
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             isCreate ?
@@ -167,7 +182,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
                     options={teacherOptions}
                     value={selectedTeacherOption}
                     className="mt-1"
-                    onChange={(selectedOption) => setValue('teacherId', selectedOption ? selectedOption.value: 0)} // Mapeia a seleção para o valor do teacherId
+                    onChange={(selectedOption) => setValue('teacherId', selectedOption ? selectedOption.value : 0)} // Mapeia a seleção para o valor do teacherId
                     styles={{
                         control: (base) => ({
                             ...base,
@@ -184,7 +199,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
                     options={subjectOptions}
                     value={selectedSubjectOption}
                     className="mt-1"
-                    onChange={(selectedOption) => setValue('subjectId', selectedOption ? selectedOption.value: 0)} // Mapeia a seleção para o valor do teacherId
+                    onChange={(selectedOption) => setValue('subjectId', selectedOption ? selectedOption.value : 0)} // Mapeia a seleção para o valor do teacherId
                     styles={{
                         control: (base) => ({
                             ...base,

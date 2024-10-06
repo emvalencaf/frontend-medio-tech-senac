@@ -3,26 +3,24 @@ import SearchInput from "./components/SearchInput";
 import toast from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
-import { MdEditCalendar, MdOutlineCalendarMonth } from "react-icons/md";
-import { SiGoogleclassroom } from "react-icons/si";
+
+import { FaBook, FaBookReader } from "react-icons/fa";
 
 export interface IFormInputs {
     name: string;
-    year: string;
-    semester: string;
+    description: string;
 }
 
-export type SearchFieldsTypes = 'name' | 'year' | 'semester';
+export type SearchFieldsTypes = 'name' | 'description';
 
-const ClassSearch: React.FC = () => {
+const SubjectSearch: React.FC = () => {
     const { handleSubmit, register, watch } = useForm<IFormInputs>();
     const [activeField, setActiveField] = useState<SearchFieldsTypes | null>(null);
 
     const nameValue = watch('name');
-    const yearValue = watch('year');
-    const semesterValue = watch('semester');
+    const descriptionValue = watch('description');
 
-    const allFieldsFilled = nameValue || yearValue || semesterValue;
+    const allFieldsFilled = nameValue || descriptionValue;
 
     const onSubmit: SubmitHandler<IFormInputs> = async (data) => {
         if (!allFieldsFilled) {
@@ -49,25 +47,17 @@ const ClassSearch: React.FC = () => {
                     id="name"
                     register={register}
                     placeholder="Nome"
-                    Icon={SiGoogleclassroom}
+                    Icon={FaBook}
                     isActive={activeField === 'name'}
                     onClick={() => setActiveField(activeField === 'name' ? null : 'name')}
                 />
                 <SearchInput
-                    id="year"
+                    id="description"
                     register={register}
-                    placeholder="Ano"
-                    Icon={MdOutlineCalendarMonth}
-                    isActive={activeField === 'year'}
-                    onClick={() => setActiveField(activeField === 'year' ? null : 'year')}
-                />
-                <SearchInput
-                    id="semester"
-                    register={register}
-                    placeholder="Semestre"
-                    Icon={MdEditCalendar}
-                    isActive={activeField === 'semester'}
-                    onClick={() => setActiveField(activeField === 'semester' ? null : 'semester')}
+                    placeholder="Descrição"
+                    Icon={FaBookReader}
+                    isActive={activeField === 'description'}
+                    onClick={() => setActiveField(activeField === 'description' ? null : 'description')}
                 />
             </div>
             <SearchButton isEnabled={!!allFieldsFilled} />
@@ -75,4 +65,4 @@ const ClassSearch: React.FC = () => {
     );
 };
 
-export default ClassSearch;
+export default SubjectSearch;
