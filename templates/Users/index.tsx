@@ -12,12 +12,13 @@ export interface IUseresTemplate {
     users: IUserEntity[],
     currentPage: number;
     totalPages: number;
+    actionSignOut: () => Promise<void>;
 }
 
-const UsersTemplate: React.FC<IUseresTemplate> = ({ users, currentPage = 1, totalPages, }) => {
+const UsersTemplate: React.FC<IUseresTemplate> = ({ actionSignOut, users, currentPage = 1, totalPages, }) => {
     return (
         <div className="w-full min-h-screen">
-            <Header title="Gerenciar Turmas" Icon={SiGoogleclassroom} />
+            <Header title="Gerenciar Turmas" Icon={SiGoogleclassroom} actionSignOut={actionSignOut} />
             <UserPanel />
             <UsersContainer users={users.map((user) => ({id: user.id, name: user.firstName + ' ' + user.lastName, userType: user.userType}))} />
             <Pagination currentPage={currentPage} totalPages={totalPages} />

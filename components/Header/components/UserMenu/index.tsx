@@ -6,6 +6,8 @@ import AvatarProfile from "../AvatarProfile";
 import UserMenuButton from "../UserButton";
 import { extractUserTypeFromBackEndToken } from "../../../../utils";
 import { userTypes } from "../../../../constants/userType";
+import { FaSignOutAlt } from "react-icons/fa";
+import { handleSignOut } from "../../../../actions/auth";
 
 /*
     React.Node para enviar ao Bell caso tenha novas notificações:
@@ -14,7 +16,11 @@ import { userTypes } from "../../../../constants/userType";
 
 */
 
-const UserMenu: React.FC = () => {
+export interface IUserMenu {
+    actionSignOut: () => Promise<void>;
+}
+
+const UserMenu: React.FC<IUserMenu> = ({ actionSignOut }) => {
     const { data } = useSession();
 
     const name = String(data?.user?.name);
@@ -26,6 +32,11 @@ const UserMenu: React.FC = () => {
             {
              userMenuButtons.map((btn) => <UserMenuButton key={btn.label} {...btn} />)   
             }
+            <UserMenuButton
+                Icon={FaSignOutAlt}
+                label="Sair"
+                onClick={() => actionSignOut()}
+            />
             <AvatarProfile
                 img_path="/assets/avatar.png"
                 name={name}

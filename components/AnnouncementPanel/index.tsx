@@ -13,11 +13,15 @@ import { extractUserTypeFromBackEndToken } from '../../utils';
 const AnnouncementPanel = () => {
     const { data } = useSession();
 
-    const userType = extractUserTypeFromBackEndToken(data?.backendToken);
+    const userType = extractUserTypeFromBackEndToken(String(data?.backendToken));
     
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [searchTerm, setSearchTerm] = useState('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [selectedTag, setSelectedTag] = useState('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [sortOrder, setSortOrder] = useState('descending');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_filters, setFilters] = useState({
         keywords: [],
         dateSort: null
@@ -25,21 +29,25 @@ const AnnouncementPanel = () => {
 
     const { onOpen } = useAnnouncementModal();
 
-    const handleSearch = (e) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleSearch = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setSearchTerm(e.target.value);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleTagFilter = () => {
         // Lógica para filtrar por etiqueta
         console.log(`Filtrando por etiqueta: ${selectedTag}`);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleAddAnnouncement = () => {
         // Lógica para adicionar um comunicado
         console.log('Adicionando um comunicado...');
     };
 
-    const handleFiltersChange = (keywords, dateSort) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleFiltersChange = (keywords: any, dateSort: any) => {
         setFilters({ keywords, dateSort });
     };
 

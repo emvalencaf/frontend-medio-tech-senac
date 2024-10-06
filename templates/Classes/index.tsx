@@ -12,12 +12,13 @@ export interface IClassesTemplate {
     classes: IClassEntity[],
     currentPage: number;
     totalPages: number;
+    actionSignOut: () => Promise<void>;
 }
 
-const ClassesTemplate: React.FC<IClassesTemplate> = ({ classes, currentPage = 1, totalPages, }) => {
+const ClassesTemplate: React.FC<IClassesTemplate> = ({ actionSignOut, classes, currentPage = 1, totalPages, }) => {
     return (
         <div className="w-full min-h-screen">
-            <Header title="Gerenciar Turmas" Icon={SiGoogleclassroom} />
+            <Header title="Gerenciar Turmas" Icon={SiGoogleclassroom} actionSignOut={actionSignOut} />
             <ClassPanel />
             <ClassesContainer classes={classes} />
             <Pagination currentPage={currentPage} totalPages={totalPages} />

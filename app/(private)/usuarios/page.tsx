@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
-import { auth } from "../../../auth";
+import { auth, signOut } from "../../../auth";
 import { AiOutlineWarning } from "react-icons/ai";
 import Link from "next/link";
 import UsersTemplate from "../../../templates/Users";
 import { getAllUsers } from "../../../actions/users";
+import { extractExpiresFromBackEndToken } from "../../../utils";
+import { handleSignOut } from "../../../actions/auth";
 
 export interface IUsersPage {
     searchParams: Record<string, string | string[] | undefined>;
@@ -13,7 +15,28 @@ export interface IUsersPage {
 export default async function UsersPage({ searchParams }: IUsersPage) {
     const session = await auth();
 
-    if (!session)
+    if (!session || !session.backendToken)
+        return redirect('/login');
+
+    const tokenExpiresAt = extractExpiresFromBackEndToken(session.backendToken);
+
+    const isTokenExpired = new Date(Number(tokenExpiresAt)).getTime() <= new Date().getTime();
+    console.log(isTokenExpired);
+
+    const actionSignOut = async () => {
+        "use server";
+
+        // Se o token já expirou, realiza o logout diretamente
+        await handleSignOut(String(session.backendToken));
+
+        await signOut({
+            redirect: true,
+            redirectTo: '/login',
+        });
+    };
+
+    // Se o token estiver expirado, realiza o logout
+    if (Number(tokenExpiresAt) * 1000 <= Date.now())
         return redirect('/login');
 
     const queryparams = {
@@ -29,6 +52,7 @@ export default async function UsersPage({ searchParams }: IUsersPage) {
 
         return (
             <UsersTemplate
+                actionSignOut={actionSignOut}
                 users={res?.data || []}
                 currentPage={res?.currentPage || 1}
                 totalPages={res?.totalPages || 1} />

@@ -1,5 +1,7 @@
-import { FaBell, FaCog, FaDoorOpen } from "react-icons/fa";
+import { FaBell, FaCog, FaDoorOpen, FaSignOutAlt } from "react-icons/fa";
 import { IUserMenuButton } from "../components/Header/components/UserButton";
+import { handleSignOut } from "../actions/auth";
+import { redirect } from "next/navigation";
 
 export const userMenuButtons: IUserMenuButton[] = [
     {
@@ -10,11 +12,6 @@ export const userMenuButtons: IUserMenuButton[] = [
     {
         Icon: FaCog,
         label: 'Configurações',
-        onClick: () => {},
-    },
-    {
-        Icon: FaDoorOpen,
-        label: 'Sair',
         onClick: () => {},
     },
 ];

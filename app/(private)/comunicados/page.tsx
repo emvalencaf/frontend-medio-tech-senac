@@ -2,9 +2,11 @@ import Link from "next/link";
 import { getAnnouncements } from "../../../actions/announcements";
 import AnnouncementTemplate from "../../../templates/Announcement";
 import { AiOutlineWarning } from "react-icons/ai";
-import { auth } from "../../../auth";
+import { auth, signOut } from "../../../auth";
 import { redirect } from "next/navigation";
 import { IGetAnnouncementsQueryParams } from "../../../actions/announcements/schemas";
+import { extractExpiresFromBackEndToken } from "../../../utils";
+import { handleSignOut } from "../../../actions/auth";
 
 export interface IAnnouncementPage {
     searchParams: Record<string, string | string[] | undefined>;
@@ -14,8 +16,23 @@ export default async function AnnouncementPage({ searchParams }: IAnnouncementPa
 
     const session = await auth();
 
-    if (!session)
+    if (!session || !session.backendToken)
         return redirect('/login');
+
+    const tokenExpiresAt = extractExpiresFromBackEndToken(session.backendToken);
+
+    const actionSignOut = async () => {
+        "use server";
+        await handleSignOut(String(session.backendToken));
+        await signOut({
+            redirect: true,
+            redirectTo: '/login',
+        })
+    }
+
+    if (Number(tokenExpiresAt) * 1000 <= Date.now())
+        return redirect('/login');
+
 
     const queryparams: IGetAnnouncementsQueryParams = {
         title: searchParams?.title ? String(searchParams.title) : undefined,
@@ -33,12 +50,13 @@ export default async function AnnouncementPage({ searchParams }: IAnnouncementPa
 
         return (
             <AnnouncementTemplate
+                actionSignOut={actionSignOut}
                 announcements={res?.data || []}
                 currentPage={res?.currentPage || 1}
                 totalPages={res?.totalPages || 1}
             />
         );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.error("Erro ao obter anúncios:", error);
 

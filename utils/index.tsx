@@ -12,3 +12,7 @@ export const extractUserTypeFromBackEndToken = (backendToken: string) => {
 export const extractUserIdFromBackEndToken = (backendToken: string) => {
     return decodeBackendToken(backendToken)?.sub;
 }
+
+export const extractExpiresFromBackEndToken = (backendToken: string) => {
+    return decodeBackendToken(backendToken)?.exp;
+}

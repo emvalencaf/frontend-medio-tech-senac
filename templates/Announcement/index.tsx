@@ -17,10 +17,11 @@ export interface IAnnouncementTemplate {
     announcements: IAnnouncementEntity[];
     currentPage: number;
     totalPages: number;
+    actionSignOut: () => Promise<void>;
 }
 
 
-const AnnouncementTemplate: React.FC<IAnnouncementTemplate> = ({ announcements, currentPage = 1, totalPages, }) => {
+const AnnouncementTemplate: React.FC<IAnnouncementTemplate> = ({ actionSignOut, announcements, currentPage = 1, totalPages, }) => {
 
     const announcementsTreated: IAnnouncement[] = announcements.map((announcement) => {
 
@@ -44,7 +45,7 @@ const AnnouncementTemplate: React.FC<IAnnouncementTemplate> = ({ announcements, 
 
     return (
         <div className="w-full">
-            <Header title="Comunicados" Icon={FaBullhorn} />
+            <Header title="Comunicados" Icon={FaBullhorn} actionSignOut={actionSignOut} />
             <AnnouncementPanel />
             <AnnouncementsContainer announcements={announcementsTreated} />
             <Pagination totalPages={totalPages} currentPage={currentPage} />

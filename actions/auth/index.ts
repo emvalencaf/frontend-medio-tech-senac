@@ -66,6 +66,7 @@ export const handleSignUp = async (signUp: UserFormData, token: string) => {
 
 export const handleSignOut = async (token: string) => {
     try {
+        console.log("tá chegando aqui, caralho?!")
         const res = await axios.post(`${BACKEND_URL}/auth/sign-out`, {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -77,6 +78,7 @@ export const handleSignOut = async (token: string) => {
         return data;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+        /*
         if (error?.response) {
             const { statusCode, message, error: errorType } = error.response?.data;
 
@@ -86,6 +88,7 @@ export const handleSignOut = async (token: string) => {
             throw new ErrorCustom(0, 'Connection problem, please check your internet.', 'ConnectionError');
         } else {
             throw new ErrorCustom(0, 'Error configuring the request: ' + error.message, 'ConfigurationError');
-        }
+        }*/
+       console.log(error);
     }   
 }

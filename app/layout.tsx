@@ -9,14 +9,14 @@ import Sidebar from "../components/Sidenav";
 import ToasterProvider from "../providers/ToasterProvider";
 import ModalProvider from "../providers/ModalProvider";
 import { IHandleActionAnnouncement } from "../types/announcement";
-import { createAnnouncement } from "../actions/announcements";
+import { createAnnouncement, getAnnouncements } from "../actions/announcements";
 import { createClass, deleteClass, getAllByTeacher, getAllClasses, getClassById, partialUpdateClass } from "../actions/classes";
-import { auth } from "../auth";
+import { auth, signOut } from "../auth";
 import { SessionProvider } from "next-auth/react";
 import NotificationProvider from "../providers/NotificationProvider";
 import { IHandleActionClass } from "../types/class";
 import { ClassFormData, ClassFormDataPartialUpdate } from "../actions/classes/schemas";
-import { extractUserIdFromBackEndToken } from "../utils";
+import { extractExpiresFromBackEndToken, extractUserIdFromBackEndToken } from "../utils";
 import { IHandleActionCoordinator } from "../types/coordinator";
 import { addStudentToClass, createTeachingAssignment, deleteTeachingAssignmentById, getTeachingAssignmentById, partialUpdateTeachingAssignment, removeStudentFromClass } from "../actions/coordinators";
 import { TeachingAssignmentFormData, TeachingAssignmentFormDataPartialUpdate } from "../actions/coordinators/schemas";
@@ -35,6 +35,7 @@ import { IHandleActionGrades } from "../types/grade";
 import { IGradeDataForm, IUpdateGradeDataForm } from "../actions/grades/schemas";
 import { createGrade, deleteGradeById, getAllGradeByTeachingIdAndStudentId, getGradeById, partialUpdateGrade } from "../actions/grades";
 import { ISubjectFormData, IUpdateSubjectFormData } from "../actions/subjects/schemas";
+import { IGetAnnouncementsQueryParams } from "../actions/announcements/schemas";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -74,8 +75,12 @@ export default async function RootLayout({
         },
         handleActionGetAllClasses: async () => {
             "use server";
-            return (await getAllClasses(token))?.data;
+            return getAllClasses(token);
         },
+        handleActionGetAnnouncements: async (queryparams?: IGetAnnouncementsQueryParams) => {
+            "use server";
+            return getAnnouncements(token, queryparams);
+        }
     }
 
     const handleActionsClass: IHandleActionClass = {

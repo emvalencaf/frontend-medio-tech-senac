@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
-import { auth } from "../../../auth";
+import { auth, signOut } from "../../../auth";
 import { getAllSubjects } from "../../../actions/subjects";
 import { AiOutlineWarning } from "react-icons/ai";
 import Link from "next/link";
 import SubjectTemplate from "../../../templates/Subjects";
+import { extractExpiresFromBackEndToken } from "../../../utils";
+import { handleSignOut } from "../../../actions/auth";
 
 export interface ISubjectPage {
     searchParams: Record<string, string | string[] | undefined>;
@@ -12,7 +14,22 @@ export interface ISubjectPage {
 export default async function SubjectPage({ searchParams }: ISubjectPage) {
     const session = await auth();
 
-    if (!session)
+    if (!session || !session.backendToken)
+        return redirect('/login');
+
+    const tokenExpiresAt = extractExpiresFromBackEndToken(session.backendToken);
+    console.log(tokenExpiresAt);
+
+    const actionSignOut = async () => {
+        "use server";
+        await handleSignOut(String(session.backendToken));
+        await signOut({
+            redirect: true,
+            redirectTo: '/login',
+        })
+    }
+
+    if (Number(tokenExpiresAt) * 1000 <= Date.now())
         return redirect('/login');
 
     const queryparams = {
@@ -27,6 +44,8 @@ export default async function SubjectPage({ searchParams }: ISubjectPage) {
 
         return (
             <SubjectTemplate
+                actionSignOut={actionSignOut}
+
                 subjects={res?.data || []}
                 currentPage={res?.currentPage || 1}
                 totalPages={res?.totalPages || 1} />

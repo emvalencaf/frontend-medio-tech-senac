@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
-import { auth } from "../../../auth";
+import { auth, signOut } from "../../../auth";
 import ClassesTemplate from "../../../templates/Classes";
 import { getAllClasses } from "../../../actions/classes";
 import { AiOutlineWarning } from "react-icons/ai";
 import Link from "next/link";
+import { extractExpiresFromBackEndToken } from "../../../utils";
+import { handleSignOut } from "../../../actions/auth";
 
 export interface IClassesPage {
     searchParams: Record<string, string | string[] | undefined>;
@@ -12,7 +14,22 @@ export interface IClassesPage {
 export default async function ClassesPage({ searchParams }: IClassesPage) {
     const session = await auth();
 
-    if (!session)
+    if (!session || !session.backendToken)
+        return redirect('/login');
+
+    const tokenExpiresAt = extractExpiresFromBackEndToken(session.backendToken);
+    console.log(tokenExpiresAt);
+
+    const actionSignOut = async () => {
+        "use server";
+        await handleSignOut(String(session.backendToken));
+        await signOut({
+            redirect: true,
+            redirectTo: '/login',
+        })
+    }
+
+    if (Number(tokenExpiresAt) * 1000 <= Date.now())
         return redirect('/login');
 
     const queryparams = {
@@ -28,6 +45,7 @@ export default async function ClassesPage({ searchParams }: IClassesPage) {
 
         return (
             <ClassesTemplate
+                actionSignOut={actionSignOut}
                 classes={res?.data || []}
                 currentPage={res?.currentPage || 1}
                 totalPages={res?.totalPages || 1} />

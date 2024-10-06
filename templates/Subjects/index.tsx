@@ -12,12 +12,13 @@ export interface ISubjectsTemplate {
     subjects: ISubjectEntity[],
     currentPage: number;
     totalPages: number;
+    actionSignOut: () => Promise<void>;
 }
 
-const SubjectTemplate: React.FC<ISubjectsTemplate> = ({ subjects, currentPage = 1, totalPages, }) => {
+const SubjectTemplate: React.FC<ISubjectsTemplate> = ({ actionSignOut, subjects, currentPage = 1, totalPages, }) => {
     return (
         <div className="w-full min-h-screen">
-            <Header title="Gerenciar Disciplinas" Icon={FaBook} />
+            <Header title="Gerenciar Disciplinas" Icon={FaBook} actionSignOut={actionSignOut} />
             <SubjectPanel />
             <SubjectsContainer subjects={subjects} />
             <Pagination currentPage={currentPage} totalPages={totalPages} />

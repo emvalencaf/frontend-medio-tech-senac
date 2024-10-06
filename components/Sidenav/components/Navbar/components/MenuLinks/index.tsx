@@ -7,11 +7,10 @@ import { extractUserTypeFromBackEndToken } from "../../../../../../utils";
 
 const MenuLinks: React.FC = () => {
     const session = useSession();
-
     const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));
 
     return (
-        <ul className="pl-14">
+        <ul className="pl-5 md:pl-14">
             {menuLinks.map(menuLink => {
                 if (menuLink.href === '/usuarios' && userType !== 'COORDINATOR')
                     return;
