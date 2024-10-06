@@ -7,7 +7,6 @@ import UserMenuButton from "../UserButton";
 import { extractUserTypeFromBackEndToken } from "../../../../utils";
 import { userTypes } from "../../../../constants/userType";
 import { FaSignOutAlt } from "react-icons/fa";
-import { handleSignOut } from "../../../../actions/auth";
 
 /*
     React.Node para enviar ao Bell caso tenha novas notificações:
@@ -25,13 +24,12 @@ const UserMenu: React.FC<IUserMenu> = ({ actionSignOut }) => {
 
     const name = String(data?.user?.name);
     const userType: 'TEACHER' | 'COORDINATOR' | 'STUDENT' = extractUserTypeFromBackEndToken(String(data?.backendToken));
-    
-    return (
-        <div className="flex items-center space-x-6">
 
-            {
-             userMenuButtons.map((btn) => <UserMenuButton key={btn.label} {...btn} />)   
-            }
+    return (
+        <div className="flex flex-row items-center w-full justify-center md:justify-end gap-1.5 space-y-4 md:space-y-0 md:space-x-6">
+            {userMenuButtons.map((btn) => (
+                <UserMenuButton key={btn.label} {...btn} />
+            ))}
             <UserMenuButton
                 Icon={FaSignOutAlt}
                 label="Sair"

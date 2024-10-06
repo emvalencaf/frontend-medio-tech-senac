@@ -1,8 +1,15 @@
 import {jwtDecode} from 'jwt-decode';
 
 export const decodeBackendToken = (backendToken: string) => {
-    const decoded = jwtDecode(backendToken);
-    return decoded
+    if (!backendToken)
+        return;
+    try {
+        const decoded = jwtDecode(backendToken);
+        
+        return decoded
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 export const extractUserTypeFromBackEndToken = (backendToken: string) => {

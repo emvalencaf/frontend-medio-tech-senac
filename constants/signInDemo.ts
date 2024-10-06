@@ -6,18 +6,18 @@ interface IDataSignInDemo {
 
 export const dataSignInDemo: IDataSignInDemo[] = [
     {
-        email: 'aocharle_vi@gmail.com',
-        password: 'medêuMaSintese1954$',
+        email: String(process.env.NEXT_PUBLIC_DEMO_AUTH_TEACHER_EMAIL),
+        password: String(process.env.NEXT_PUBLIC_DEMO_AUTH_TEACHER_PASSWORD),
         userType: 'TEACHER',
     },
     {
-        email: 'aocharle_iii@gmail.com',
-        password: 'medêuMaSintese1954$',
+        email: String(process.env.NEXT_PUBLIC_DEMO_AUTH_STUDENT_EMAIL),
+        password: String(process.env.NEXT_PUBLIC_DEMO_AUTH_STUDENT_PASSWORD),
         userType: 'STUDENT',
     },
     {
-        email: 'aocharle_ii@gmail.com',
-        password: 'medêuMaSintese1954$',
+        email: String(process.env.NEXT_PUBLIC_DEMO_AUTH_COORDINATOR_EMAIL),
+        password: String(process.env.NEXT_PUBLIC_DEMO_AUTH_COORDINATOR_PASSWORD),
         userType: 'COORDINATOR',
     },
 ]

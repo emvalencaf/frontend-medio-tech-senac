@@ -270,7 +270,8 @@ export default async function RootLayout({
                     />
                     <ToasterProvider />
                     {session && <Sidebar />}
-                    <main className="flex justify-center items-center w-full">
+                    <main className="flex flex-1 flex-col justify-center items-center w-full p-4 md:ml-64">
+                        {/* A margem lateral esquerda no desktop (md:ml-64) empurra o conteúdo para dar espaço à sidebar */}
                         {children}
                     </main>
                 </SessionProvider>

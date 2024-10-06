@@ -17,15 +17,13 @@ const SearchInput: React.FC<ISearchInput> = ({ id, register, placeholder, Icon, 
             <input
                 id={id}
                 type="text"
-                className={`absolute inset-0 w-full p-2 border border-gray-300 rounded outline-none transition-transform duration-300 transform ${isActive ? 'opacity-100 translate-x-0 bg-white' : 'opacity-0 translate-x-full'
-                    }`}
+                className={`absolute inset-0 w-full p-2 border border-gray-300 rounded outline-none transition-transform duration-300 transform ${isActive ? 'opacity-100 translate-x-0 bg-white' : 'opacity-0 translate-x-full'} `}
                 {...register(id)}
                 placeholder={placeholder}
             />
             <label
                 htmlFor={id}
-                className={`flex items-center justify-between p-3 cursor-pointer text-gray-600 bg-purple-300 transition-transform duration-300 transform ${isActive ? 'opacity-0 translate-x-full' : 'opacity-100 translate-x-0'
-                    }`}
+                className={`flex items-center justify-between p-3 cursor-pointer text-gray-600 bg-purple-300 transition-transform duration-300 transform ${isActive ? 'opacity-0 translate-x-full' : 'opacity-100 translate-x-0'}`}
                 onClick={onClick}
             >
                 <Icon className="text-gray-600" />
@@ -34,5 +32,6 @@ const SearchInput: React.FC<ISearchInput> = ({ id, register, placeholder, Icon, 
         </div>
     );
 };
+
 
 export default SearchInput;

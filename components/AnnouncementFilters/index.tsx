@@ -25,9 +25,8 @@ const AnnouncementFilters: React.FC<IAnnouncementFilters> = ({ onFiltersChange }
         setDateSortOrder(newOrder);
         onFiltersChange(selectedKeywords, newOrder);
     };
-
     return (
-        <div className="bg-white p-4 w-1/3 rounded-md shadow-md flex gap-1.5 items-center justify-center">
+        <div className="bg-white p-4 w-full md:w-1/3 rounded-md shadow-md flex flex-col md:flex-row gap-1.5 items-center justify-center">
             <div className="flex items-center">
                 <label className="block text-xs font-medium text-gray-700 mr-2">
                     Ordenar por data:
@@ -40,12 +39,12 @@ const AnnouncementFilters: React.FC<IAnnouncementFilters> = ({ onFiltersChange }
                     {dateSortOrder === 'desc' ? <FaSortAmountDown /> : <FaSortAmountUp />}
                 </button>
             </div>
-            <div className="mb-4 flex items-center justify-center">
+            <div className="flex items-center justify-center w-full">
                 <Select
                     isMulti
                     name="keywords"
                     options={keywordOptions}
-                    className="basic-multi-select flex items-center justify-center"
+                    className="basic-multi-select w-full"
                     classNamePrefix="select"
                     value={selectedKeywords}
                     onChange={handleKeywordChange}

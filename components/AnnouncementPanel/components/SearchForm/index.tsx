@@ -40,10 +40,10 @@ const AnnouncementSearch: React.FC = () => {
 
     return (
         <form
-            className="relative flex items-center bg-gray-100 border border-gray-300 rounded-md max-w-screen-lg mx-auto w-1/2"
+            className="relative flex flex-col md:flex-row items-center bg-gray-100 border border-gray-300 rounded-md w-full md:w-3/4 mx-auto"
             onSubmit={handleSubmit(onSubmit)}
         >
-            <div className="flex w-4/5">
+            <div className="flex w-full">
                 <SearchInput
                     id="title"
                     register={register}

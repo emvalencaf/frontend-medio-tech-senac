@@ -14,7 +14,7 @@ const AnnouncementPanel = () => {
     const { data } = useSession();
 
     const userType = extractUserTypeFromBackEndToken(String(data?.backendToken));
-    
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [searchTerm, setSearchTerm] = useState('');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -53,7 +53,7 @@ const AnnouncementPanel = () => {
 
     return (
         <div className="flex flex-col space-y-4 p-4 bg-white shadow-md rounded-lg items-center justify-center w-full">
-            <div className='flex gap-3 items-center justify-center w-full'>
+            <div className="flex flex-col gap-3 items-center justify-center w-full md:flex-row">
                 <AnnouncementSearch />
                 <AnnouncementFilters onFiltersChange={handleFiltersChange} />
                 {userType !== "STUDENT" &&

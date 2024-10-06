@@ -10,15 +10,15 @@ const MenuLinks: React.FC = () => {
     const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));
 
     return (
-        <ul className="pl-5 md:pl-14">
+        <ul className="pl-4 md:pl-8 space-y-2"> {/* Ajuste de padding e espaçamento vertical */}
             {menuLinks.map(menuLink => {
                 if (menuLink.href === '/usuarios' && userType !== 'COORDINATOR')
-                    return;
+                    return null;
 
                 return <MenuLink key={menuLink.href} {...menuLink} />
             })}
         </ul>
     );
-}
+};
 
 export default MenuLinks;

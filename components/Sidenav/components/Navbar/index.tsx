@@ -8,6 +8,6 @@ const NavBar: React.FC = () => {
             <MenuLinks />
         </nav>
     );
-}
+};
 
 export default NavBar;

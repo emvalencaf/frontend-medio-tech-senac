@@ -17,7 +17,6 @@ const UserMenuButton: React.FC<IUserMenuButton> = ({Icon, label, onClick, childr
     const token = session.data?.backendToken;
 
     const handleClick = () => {
-        console.log('aqui tá funcionando ao menos?')
         if (label === "Sair")
             onClick(token);
     }

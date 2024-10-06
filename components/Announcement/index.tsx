@@ -17,18 +17,13 @@ export interface IAnnouncement {
     content: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Announcement: React.FC<IAnnouncement> = ({ id, title, createdAt, author, content }) => {
     return (
-        <div className="bg-white shadow-md rounded-lg overflow-hidden" id={`announcement-${author}-${id}`}>
-            <div className="p-4 border-b">
-                <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">{title}</h3>
-                    <AvatarProfile
-                        img_path={author.avatarUrl}
-                        name={author.name}
-                        userType={author.userType}
-                    />
-                </div>
+        <div className="bg-white shadow-md rounded-lg overflow-hidden w-full">
+            <div className="p-4 border-b flex flex-col md:flex-row justify-between items-center">
+                <h3 className="text-lg font-semibold">{title}</h3>
+                <AvatarProfile img_path={author.avatarUrl} name={author.name} userType={author.userType} />
             </div>
             <div className="p-4">
                 <p className="text-gray-700">{content}</p>

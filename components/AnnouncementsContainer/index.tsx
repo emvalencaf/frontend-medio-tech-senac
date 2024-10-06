@@ -11,7 +11,7 @@ export interface IAnnouncementsContainer {
 
 const AnnouncementsContainer: React.FC<IAnnouncementsContainer> = ({ announcements }) => {
     return (
-        <div className="w-full mx-auto my-8 p-9 flex gap-5 flex-col">
+        <div className="w-full mx-auto my-8 p-4 md:p-9 flex flex-col gap-5">
             {announcements.map((announcement) => (
                 <Announcement
                     key={`announcement-${announcement.id}`}
