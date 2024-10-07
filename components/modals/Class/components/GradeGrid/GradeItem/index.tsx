@@ -1,8 +1,6 @@
 "use client";
 
-import { FaEdit, FaTrash } from "react-icons/fa";
 import ActionButton from "../../../../../ActionButton";
-import toast from "react-hot-toast";
 import useClassModal from "../../../../../../hooks/useClassModal";
 import { useSession } from "next-auth/react";
 import { extractUserTypeFromBackEndToken } from "../../../../../../utils";
@@ -26,7 +24,7 @@ export interface IGradeItemComponent {
     handleActionDeleteGrade: (gradeId: number) => Promise<void>;
 }
 
-const GradeItem: React.FC<IGradeItemComponent> = ({ grade, handleActionDeleteGrade }) => {
+const GradeItem: React.FC<IGradeItemComponent> = ({ grade, }) => {
     const session = useSession();
 
     const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));

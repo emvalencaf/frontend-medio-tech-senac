@@ -16,7 +16,8 @@ import { AiOutlineUser, AiOutlineFileText } from 'react-icons/ai'; // Ícones pa
 // schemas and types
 import { AnnouncementFormData, announcementSchema } from '../../../../../actions/announcements/schemas';
 import { IAnnouncementEntity } from '../../../../../actions/announcements/types';
-import { IClassEntity } from '../../../../../actions/classes/types';
+import { IClassEntity, IGetClassesResponse } from '../../../../../actions/classes/types';
+import { useSession } from 'next-auth/react';
 
 export interface IClassOptions {
     value: number;
@@ -26,16 +27,23 @@ export interface IClassOptions {
 // interfaces
 export interface IAnnouncementForm {
     handleActionCreate: (data: AnnouncementFormData) => Promise<IAnnouncementEntity | null>;
-    handleActionGetClassOptions: () => Promise<IClassEntity[] | null>;
+    handleActionGetClassOptions: () => Promise<IGetClassesResponse | null>;
+    handleActionGetClassOptionsForTeachers: (authorId: number) => Promise<IClassEntity[] | null>;
+    userType?: string;
 }
 
 const AnnouncementForm: React.FC<IAnnouncementForm> = ({
     handleActionCreate,
     handleActionGetClassOptions,
+    handleActionGetClassOptionsForTeachers,
+    userType,
 }) => {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<AnnouncementFormData>({
         resolver: zodResolver(announcementSchema),
     });
+
+    const session = useSession();
+    const userId = session.data?.user?.id;
 
     const { onClose } = useAnnouncementModal();
 
@@ -50,11 +58,23 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             setLoadingClassOptions(true);
             setErrorClassOptions(null);
             try {
-                const data = await handleActionGetClassOptions();
+                let data: IClassEntity[] = [];
+                if (userType === 'COORDINATOR') {
+                    const res = await handleActionGetClassOptions();
+    
+                    if (!res || !res.data)
+                        return setClassOptions([]);
+    
+                    data = res.data;
 
-                if (!data)
-                    return setClassOptions([]);
+                } else if (userType === 'TEACHER') {
+                    const res = await handleActionGetClassOptionsForTeachers(Number(userId));
 
+                    if (!res)
+                        return setClassOptions([]);
+
+                    data = res;
+                }
                 const options = data.map((classItem: { id: number; name: string }) => ({
                     value: classItem.id,
                     label: classItem.name,
@@ -69,7 +89,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
         };
 
         fetchClasses();
-    }, [handleActionGetClassOptions]);
+    }, [handleActionGetClassOptions, handleActionGetClassOptionsForTeachers, userId, userType]);
 
     const onSubmit = async (data: AnnouncementFormData) => {
         try {

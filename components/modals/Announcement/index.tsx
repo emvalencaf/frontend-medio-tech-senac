@@ -27,7 +27,7 @@ const AnnouncementModal: React.FC<IAnnouncementModal> = ({
 
     return (
         <Modal title='Criar Comunicado' subtitle='Escreva o comunicado que você quer passar aos seus alunos' onClose={onClose} isOpen={isOpen}>
-            <AnnouncementForm handleActionCreate={handleActionCreate} handleActionGetClassOptions={userType === 'TEACHER' ?handleActionGetClassesByTeacher : handleActionGetAllClasses}/>
+            <AnnouncementForm handleActionCreate={handleActionCreate} userType={userType} handleActionGetClassOptionsForTeachers={handleActionGetClassesByTeacher} handleActionGetClassOptions={handleActionGetAllClasses} />
             {/*
                 Quando implementar o sistema de autenticação e autorização vai ter que passar o handleActionGetClassesByTeacher e handleActionGetClasses a depender do tipo do usuário.
             */}

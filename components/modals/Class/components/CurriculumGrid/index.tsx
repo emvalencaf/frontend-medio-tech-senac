@@ -37,7 +37,7 @@ const CurriculumGrid: React.FC<ICurriculumGrid> = ({ handleActionGetById, handle
                     },
                     subject: {
                         id: el.subjectId,
-                        name: el?.subject?.name,
+                        name: String(el?.subject?.name),
                     },
                 }
             })

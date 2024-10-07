@@ -23,7 +23,8 @@ const UserMenu: React.FC<IUserMenu> = ({ actionSignOut }) => {
     const { data } = useSession();
 
     const name = String(data?.user?.name);
-    const userType: 'TEACHER' | 'COORDINATOR' | 'STUDENT' = extractUserTypeFromBackEndToken(String(data?.backendToken));
+    const userType = extractUserTypeFromBackEndToken(String(data?.backendToken));
+
 
     return (
         <div className="flex flex-row items-center w-full justify-center md:justify-end gap-1.5 space-y-4 md:space-y-0 md:space-x-6">
@@ -38,7 +39,7 @@ const UserMenu: React.FC<IUserMenu> = ({ actionSignOut }) => {
             <AvatarProfile
                 img_path="/assets/avatar.png"
                 name={name}
-                userType={userTypes[userType]}
+                userType={userTypes[userType || 'STUDENT']}
             />
         </div>
     );

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { IUserEntity } from "../../../../../actions/users/types";
 
 export interface IOptions {
-    value: string;
+    value?: 'TEACHER' | 'COORDINATOR' | 'STUDENT';
     label: string;
 }
 
@@ -29,7 +29,7 @@ const UpdateUserForm: React.FC<IUpdateUserForm> = ({
     handleActionGetUserById,
 }) => {
     const { onClose, userId, actionPanelStatus } = useUserModal();
-    const { register, handleSubmit, formState: { errors }, setValue, watch, reset } = useForm<UpdateUserFormData>({
+    const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm<UpdateUserFormData>({
         resolver: zodResolver(updateUserSchema),
     });
 
@@ -63,7 +63,7 @@ const UpdateUserForm: React.FC<IUpdateUserForm> = ({
 
             fetchUserData();
         }
-    }, [userId, actionPanelStatus, reset]);
+    }, [userId, actionPanelStatus, reset, handleActionGetUserById]);
 
     const onSubmit = async (data: UpdateUserFormData) => {
         try {
@@ -110,7 +110,7 @@ const UpdateUserForm: React.FC<IUpdateUserForm> = ({
                     options={userTypeOptions}
                     className="mt-1"
                     onChange={(selectedOption) => {
-                        setValue('userType', selectedOption?.value || ''); // Atualiza o valor no formulário
+                        setValue('userType', selectedOption?.value || undefined); // Atualiza o valor no formulário
                         setSelectedUserType(selectedOption); // Atualiza o estado local para renderizar o valor selecionado
                     }}
                     value={selectedUserType} // Valor selecionado

@@ -87,7 +87,7 @@ const TeachingAssignmentForm: React.FC<ITeachingAssignmentForm> = ({
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         teachingAssignmentId && fetchAssignmentTeaching(teachingAssignmentId);
 
-    }, [teachingAssignmentId]);
+    }, [handleActionGetTeachingAssignmentById, teachingAssignmentId]);
 
 
     useEffect(() => {

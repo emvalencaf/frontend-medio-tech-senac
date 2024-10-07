@@ -9,7 +9,7 @@ import { IUserEntity } from "../../../../../actions/users/types";
 
 
 export interface IOptions {
-    value: string;
+    value: 'TEACHER' | 'COORDINATOR' | 'STUDENT';
     label: string;
 }
 
@@ -26,8 +26,8 @@ const userTypeOptions: IOptions[] = [
 const UserForm: React.FC<IUserForm> = ({
     handleActionCreateUser,
 }) => {
-    const { onClose, userId, actionPanelStatus } = useUserModal();
-    const { register, handleSubmit, formState: { errors }, setValue, watch, reset } = useForm<UserFormData>({
+    const { onClose, actionPanelStatus } = useUserModal();
+    const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<UserFormData>({
         resolver: zodResolver(signUpSchema), // Usa schema baseado na ação
     });
 
@@ -108,9 +108,7 @@ const UserForm: React.FC<IUserForm> = ({
                 <Select
                     options={userTypeOptions}
                     className="mt-1"
-                    onChange={(selectedOption) => setValue('userType', selectedOption ? selectedOption.value : '', {
-                        shouldValidate: true,
-                    })}
+                    onChange={(selectedOption) => setValue('userType', selectedOption?.value || 'STUDENT')}
                     value={userTypeOptions.find(option => option.value === watch('userType'))}
                     styles={{
                         control: (base) => ({

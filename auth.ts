@@ -21,10 +21,15 @@ const configCredentialsOptions: CredentialsConfig = {
             }
     
             const { user, backendToken } = res;
+
+            
     
-            user.backendToken = backendToken;
+            const signedInUser = {
+                ...user,
+                backendToken,
+            };
     
-            return user;
+            return signedInUser;
 
         } catch (err) {
             console.log(err);
