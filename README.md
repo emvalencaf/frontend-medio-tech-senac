@@ -36,9 +36,9 @@ git clone https://github.com/emvalencaf/frontend-medio-tech-senac/
 cd frontend-medio-tech-senac
 npm install
 npx prisma generate
-npm run dev
+npm run dev  
 
-🌐 Deploy  
+## 🌐 Deploy  
 
 A maneira mais fácil de fazer o deploy de sua aplicação Next.js é usando a Plataforma Vercel.
 
