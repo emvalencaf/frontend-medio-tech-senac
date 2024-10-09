@@ -33,9 +33,12 @@ Clone o repositório:
 
 git clone https://github.com/emvalencaf/frontend-medio-tech-senac/
 
-cd frontend-medio-tech-senac
-npm install
-npx prisma generate
+cd frontend-medio-tech-senac  
+
+npm install  
+
+npx prisma generate  
+
 npm run dev  
 
 ## 🌐 Deploy  
