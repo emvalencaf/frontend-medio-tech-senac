@@ -17,7 +17,7 @@ Controle de Permissões: Diferentes níveis de acesso para coordenadores, profes
 Node.js (v14+)
 npm ou yarn
 Mysql
-##📦 Instalação
+## 📦 Instalação
 Clone o repositório:
 
 git clone [https://github.com/seu-usuario/sistema-escolar.git](https://github.com/emvalencaf/frontend-medio-tech-senac/)
