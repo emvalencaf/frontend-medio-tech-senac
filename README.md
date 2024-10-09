@@ -159,3 +159,17 @@ Crie um Pull Request.
 
 ## 📄 Licença
 Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
+
+## Integrantes: 
+
+@emvalencaf  
+
+@romullo99  
+
+@pxxx010  
+
+@iagovieir  
+
+@36priscilapsilva  
+
+@jwavrik  
