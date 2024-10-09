@@ -20,7 +20,7 @@ Mysql
 ## 📦 Instalação
 Clone o repositório:
 
-git clone [https://github.com/seu-usuario/sistema-escolar.git](https://github.com/emvalencaf/frontend-medio-tech-senac/)
+git clone https://github.com/emvalencaf/frontend-medio-tech-senac/
 
 cd frontend-medio-tech-senac
 npm install
