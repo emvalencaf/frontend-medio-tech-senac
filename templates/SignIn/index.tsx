@@ -17,7 +17,7 @@ export interface ISignInTemplate {
 const SignInTemplate: React.FC<ISignInTemplate> = ({ handleSignIn }) => {
 
     return (
-        <div className="min-h-screen flex items-center gap-5 justify-center bg-gradient-to-r from-purple-500 to-purple-800 ">
+        <div className="min-h-screen w-full flex items-center gap-5 justify-center bg-gradient-to-r from-purple-500 to-purple-800 ">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-semibold text-center text-purple-700 mb-8">
                     Seja bem-vindo ao sistema do MédioTec SENAC
