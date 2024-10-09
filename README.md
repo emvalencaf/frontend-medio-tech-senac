@@ -2,13 +2,15 @@
 Este é um Sistema Escolar desenvolvido com Next.js, React, JavaScript e TypeScript para gerenciar informações acadêmicas, turmas, disciplinas, alunos, professores e coordenadores. O sistema oferece um painel administrativo para facilitar a gestão de um ambiente educacional.
 
 ## 🚀 Tecnologias Utilizadas
-Next.js: Framework React para construção de aplicações web com renderização no lado do servidor.  
+Next.js
 
-React: Biblioteca JavaScript para criação de interfaces de usuário.  
+React
 
-JavaScript: Linguagem de programação principal do front-end.  
+JavaScript
 
-TypeScript: Superset do JavaScript que adiciona tipagem estática.  
+TypeScript  
+
+Tailwind CSS
 
 ## ⚙️ Funcionalidades
 
