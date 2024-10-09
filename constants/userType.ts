@@ -3,3 +3,9 @@ export const userTypes = {
     TEACHER: 'Professor',
     COORDINATOR: 'Coordenador',
 };
+
+export const userTypeQueryParam = {
+    estudante: 'STUDENT',
+    professor: 'TEACHER',
+    coordenador: 'COORDINATOR',
+}

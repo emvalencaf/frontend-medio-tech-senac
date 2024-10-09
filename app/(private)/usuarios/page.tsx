@@ -6,6 +6,7 @@ import UsersTemplate from "../../../templates/Users";
 import { getAllUsers } from "../../../actions/users";
 import { extractExpiresFromBackEndToken } from "../../../utils";
 import { handleSignOut } from "../../../actions/auth";
+import { userTypeQueryParam } from "../../../constants/userType";
 
 export interface IUsersPage {
     searchParams: Record<string, string | string[] | undefined>;
@@ -39,10 +40,43 @@ export default async function UsersPage({ searchParams }: IUsersPage) {
     if (Number(tokenExpiresAt) * 1000 <= Date.now())
         return redirect('/login');
 
-    const queryparams = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let queryparams: any = {}
+
+    queryparams = {
+        ...queryparams,
         page: searchParams?.page ? Number(searchParams.page) : 1,
         limit: searchParams?.limit ? Number(searchParams.limit) : 7,
     };
+
+    if (searchParams?.userType) {
+        const q = String(searchParams.userType).toLowerCase();
+
+        queryparams = {
+            ...queryparams,
+            userType: Object.keys(userTypeQueryParam).includes(q)
+                ? userTypeQueryParam[q as 'estudante' | 'professor' | 'coordenador']
+                : undefined
+        }
+    }
+
+    if (searchParams?.subjectName)
+        queryparams = {
+            ...queryparams,
+            subjectName: searchParams.subjectName,
+        }
+
+    if (searchParams?.name)
+        queryparams = {
+            ...queryparams,
+            name: searchParams.name,
+        }
+
+    if (searchParams?.className)
+        queryparams = {
+            ...queryparams,
+            className: searchParams.className,
+        }
 
     const token = session.backendToken;
 

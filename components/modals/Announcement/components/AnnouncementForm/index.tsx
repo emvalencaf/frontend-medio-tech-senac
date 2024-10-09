@@ -54,6 +54,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
     const [errorClassOptions, setErrorClassOptions] = useState<string | null>(null);
 
     useEffect(() => {
+        console.log("useEffect is running", userType, userId);
         const fetchClasses = async () => {
             setLoadingClassOptions(true);
             setErrorClassOptions(null);
@@ -61,36 +62,41 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
                 let data: IClassEntity[] = [];
                 if (userType === 'COORDINATOR') {
                     const res = await handleActionGetClassOptions();
+                    console.log('in coordinator if, the response was: ', res);
     
-                    if (!res || !res.data)
-                        return setClassOptions([]);
+                    if (!res || !res.data) return setClassOptions([]);
     
                     data = res.data;
-
+                    console.log('in coordinator if, the data fetched was: ', data);
                 } else if (userType === 'TEACHER') {
                     const res = await handleActionGetClassOptionsForTeachers(Number(userId));
-
-                    if (!res)
-                        return setClassOptions([]);
-
+                    console.log('in teacher if, the response was:', res);
+    
+                    if (!res) return setClassOptions([]);
+    
                     data = res;
+                    console.log('in teacher if, data fetched was: ', data);
                 }
                 const options = data.map((classItem: { id: number; name: string }) => ({
                     value: classItem.id,
                     label: classItem.name,
                 }));
                 setClassOptions(options);
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
                 setErrorClassOptions('Failed to fetch classes');
             } finally {
                 setLoadingClassOptions(false);
             }
         };
-
-        fetchClasses();
-    }, [handleActionGetClassOptions, handleActionGetClassOptionsForTeachers, userId, userType]);
-
+    
+        if (userType && userId) {
+            fetchClasses();
+        } else {
+            console.log("userType or userId is missing");
+        }
+    }, [handleActionGetClassOptions, handleActionGetClassOptionsForTeachers, userId, userType, session]);
+    
     const onSubmit = async (data: AnnouncementFormData) => {
         try {
             const res = await handleActionCreate(data);

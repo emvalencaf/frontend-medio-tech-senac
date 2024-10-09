@@ -10,6 +10,10 @@ export interface IGetUsersQueryParams {
     order?: 'asc' | 'desc';
     page?: number;
     limit?: number;
+    userType?: string;
+    name?: string;
+    subjectName?: string;
+    className?: string;
 }
 
 export interface IGetUsersResponse {
