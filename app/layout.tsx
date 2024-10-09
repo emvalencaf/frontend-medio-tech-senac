@@ -254,7 +254,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased flex w-full`}
             >
                 <SessionProvider session={session}>
                     <NotificationProvider />
@@ -269,8 +269,8 @@ export default async function RootLayout({
                         handleActionGrade={handleActionGrade}
                     />
                     <ToasterProvider />
-                    {session && <Sidebar />}
-                    <main className="flex flex-1 flex-col justify-center items-center w-full p-4 md:ml-64">
+                    {session?.user && <Sidebar />}
+                    <main className="flex flex-1 flex-col justify-center items-center w-full">
                         {/* A margem lateral esquerda no desktop (md:ml-64) empurra o conteúdo para dar espaço à sidebar */}
                         {children}
                     </main>
