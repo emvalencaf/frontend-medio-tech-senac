@@ -46,5 +46,5 @@ Faça suas alterações e commit: git commit -m 'Adiciona nova feature'.
 Envie para o repositório: git push origin feature/nova-feature.
 Crie um Pull Request.
 
-##📄 Licença
+## 📄 Licença
 Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
