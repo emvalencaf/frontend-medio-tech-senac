@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import AnnouncementSearch from './components/SearchForm';
 import AnnouncementFilters from '../AnnouncementFilters';
 import AddAnnouncementButton from './components/AddAnnouncementButton';
-import useAnnouncementModal from '../../hooks/useAnnouncementModal';
 import { useSession } from 'next-auth/react';
 import { extractUserTypeFromBackEndToken } from '../../utils';
 
@@ -26,8 +25,6 @@ const AnnouncementPanel = () => {
         keywords: [],
         dateSort: null
     });
-
-    const { onOpen } = useAnnouncementModal();
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleSearch = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -57,7 +54,7 @@ const AnnouncementPanel = () => {
                 <AnnouncementSearch />
                 <AnnouncementFilters onFiltersChange={handleFiltersChange} />
                 {userType !== "STUDENT" &&
-                    <AddAnnouncementButton onClick={onOpen} />
+                    <AddAnnouncementButton />
                 }
             </div>
         </div>

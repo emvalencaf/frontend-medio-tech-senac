@@ -269,8 +269,10 @@ export default async function RootLayout({
                         handleActionGrade={handleActionGrade}
                     />
                     <ToasterProvider />
-                    {session?.user && <Sidebar />}
-                    <main className="flex flex-1 flex-col justify-center items-center w-full">
+                    <div className={session?.user? '' : `bg-gradient-to-r from-purple-500 to-purple-800`}>
+                        {session?.user && <Sidebar />}
+                    </div>
+                    <main className="flex flex-1 flex-col justify-center items-center w-full md:ml-64">
                         {/* A margem lateral esquerda no desktop (md:ml-64) empurra o conteúdo para dar espaço à sidebar */}
                         {children}
                     </main>

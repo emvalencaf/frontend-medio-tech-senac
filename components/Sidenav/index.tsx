@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
     };
 
     return (
-        <div>
+        <>
             {/* Botão de menu hambúrguer visível apenas em dispositivos móveis */}
             <button 
                 className="md:hidden p-4 text-white bg-purple-900 fixed top-0 left-0 z-50" 
@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
 
             {/* Overlay para fechar o menu ao clicar fora (apenas em dispositivos móveis) */}
             {isOpen && <div className="fixed inset-0 bg-black opacity-50 md:hidden z-30" onClick={toggleSidebar}></div>}
-        </div>
+        </>
     );
 };
 

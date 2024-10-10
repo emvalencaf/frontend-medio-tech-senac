@@ -2,13 +2,15 @@ import { create, } from "zustand";
 
 interface IuseAnnouncementModalStore {
     isOpen: boolean;
-    onOpen: () => void;
+    onOpen: (userId?: number, userType?: string) => void;
     onClose: () => void;
+    userId?: number;
+    userType?: string;
 }
 
 const useAnnouncementModal = create<IuseAnnouncementModalStore>((set) => ({
     isOpen: false,
-    onOpen: () => set({ isOpen: true, }),
+    onOpen: (userId, userType) => set({ isOpen: true, userId, userType }),
     onClose: () => set({ isOpen: false, },),
 }));
 

@@ -17,7 +17,6 @@ import { AiOutlineUser, AiOutlineFileText } from 'react-icons/ai'; // Ícones pa
 import { AnnouncementFormData, announcementSchema } from '../../../../../actions/announcements/schemas';
 import { IAnnouncementEntity } from '../../../../../actions/announcements/types';
 import { IClassEntity, IGetClassesResponse } from '../../../../../actions/classes/types';
-import { useSession } from 'next-auth/react';
 
 export interface IClassOptions {
     value: number;
@@ -29,23 +28,18 @@ export interface IAnnouncementForm {
     handleActionCreate: (data: AnnouncementFormData) => Promise<IAnnouncementEntity | null>;
     handleActionGetClassOptions: () => Promise<IGetClassesResponse | null>;
     handleActionGetClassOptionsForTeachers: (authorId: number) => Promise<IClassEntity[] | null>;
-    userType?: string;
 }
 
 const AnnouncementForm: React.FC<IAnnouncementForm> = ({
     handleActionCreate,
     handleActionGetClassOptions,
     handleActionGetClassOptionsForTeachers,
-    userType,
 }) => {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<AnnouncementFormData>({
         resolver: zodResolver(announcementSchema),
     });
 
-    const session = useSession();
-    const userId = session.data?.user?.id;
-
-    const { onClose } = useAnnouncementModal();
+    const { onClose, userId, userType } = useAnnouncementModal();
 
     const [classOptions, setClassOptions] = useState<IClassOptions[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -55,6 +49,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
 
     useEffect(() => {
         console.log("useEffect is running", userType, userId);
+        
         const fetchClasses = async () => {
             setLoadingClassOptions(true);
             setErrorClassOptions(null);
@@ -95,7 +90,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
         } else {
             console.log("userType or userId is missing");
         }
-    }, [handleActionGetClassOptions, handleActionGetClassOptionsForTeachers, userId, userType, session]);
+    }, [handleActionGetClassOptions, handleActionGetClassOptionsForTeachers, userId, userType]);
     
     const onSubmit = async (data: AnnouncementFormData) => {
         try {
