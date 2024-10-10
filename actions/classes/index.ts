@@ -103,6 +103,8 @@ export const getAllByTeacher = async (teacherId: number, token: string): Promise
 
 export const getAllClasses = async (token: string, queryParams?: IGetClassesQueryParams): Promise<IGetClassesResponse | null> => {
     try {
+        console.log(token);
+        console.log('foi aqui?!');
         const url = new URL(`${BACKEND_URL}`);
 
         if (queryParams) {

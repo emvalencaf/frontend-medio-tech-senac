@@ -47,6 +47,8 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [errorClassOptions, setErrorClassOptions] = useState<string | null>(null);
 
+    console.log('in announcement form: ', userId, userType);
+
     useEffect(() => {
         console.log("useEffect is running", userType, userId);
         
@@ -55,7 +57,9 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
             setErrorClassOptions(null);
             try {
                 let data: IClassEntity[] = [];
+                console.log('bora, man');
                 if (userType === 'COORDINATOR') {
+                    console.log("bora bill")
                     const res = await handleActionGetClassOptions();
                     console.log('in coordinator if, the response was: ', res);
     
@@ -64,6 +68,7 @@ const AnnouncementForm: React.FC<IAnnouncementForm> = ({
                     data = res.data;
                     console.log('in coordinator if, the data fetched was: ', data);
                 } else if (userType === 'TEACHER') {
+                    console.log('bora bill, aqui teacher');
                     const res = await handleActionGetClassOptionsForTeachers(Number(userId));
                     console.log('in teacher if, the response was:', res);
     

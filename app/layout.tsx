@@ -114,7 +114,7 @@ export default async function RootLayout({
         },
         handleActionGetAllClasses: async () => {
             "use server";
-            return getAllClasses(token);
+            return getAllClasses(token, { noPagination: true, });
         },
         handleActionGetAnnouncements: async (queryparams?: IGetAnnouncementsQueryParams) => {
             "use server";
@@ -269,10 +269,8 @@ export default async function RootLayout({
                         handleActionGrade={handleActionGrade}
                     />
                     <ToasterProvider />
-                    <div className={session?.user? '' : `bg-gradient-to-r from-purple-500 to-purple-800`}>
-                        {session?.user && <Sidebar />}
-                    </div>
-                    <main className="flex flex-1 flex-col justify-center items-center w-full md:ml-64">
+                    {session?.user && <Sidebar />}
+                    <main className={`flex flex-1 flex-col justify-center items-center w-full ${session?.user? 'md:ml-64' : ''}`}>
                         {/* A margem lateral esquerda no desktop (md:ml-64) empurra o conteúdo para dar espaço à sidebar */}
                         {children}
                     </main>

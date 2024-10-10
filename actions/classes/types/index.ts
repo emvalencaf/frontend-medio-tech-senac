@@ -15,6 +15,7 @@ export interface IGetClassesQueryParams {
     order?: 'asc' | 'desc';
     page?: number;
     limit?: number;
+    noPagination: boolean;
 }
 
 export interface IGetClassesResponse {

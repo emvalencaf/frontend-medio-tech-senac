@@ -2,7 +2,8 @@ import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import { FaBullhorn } from 'react-icons/fa';
 import useAnnouncementModal from '../../../../hooks/useAnnouncementModal';
-import { extractUserTypeFromBackEndToken } from '../../../../utils';
+import { decodeBackendToken } from '../../../../utils';
+import toast from 'react-hot-toast';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface AddAnnouncementButtonProps {
@@ -17,10 +18,14 @@ const AddAnnouncementButton: React.FC<AddAnnouncementButtonProps> = ({ }) => {
     const session = useSession();
 
     const handleClick = () => {
-        const userType = extractUserTypeFromBackEndToken(String(session.data?.backendToken));
-        const userId = Number(session.data?.user?.id);
-        
-        onOpen(userId, userType);
+        const tokenPayload = decodeBackendToken(String(session.data?.backendToken));
+
+        if (!tokenPayload)
+            return toast.error('Algo deu errado em nossos servidores, por favor, tente novamente');
+
+        console.log("in handle click: ", tokenPayload?.sub, tokenPayload?.userType);
+
+        onOpen(Number(tokenPayload?.sub), String(tokenPayload?.userType));
     }
 
     return (
